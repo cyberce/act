@@ -1,0 +1,60 @@
+<script type="text/Javascript">
+    <![CDATA[
+
+    function print(obj, id, height, width, style) {
+        DispWin = window.open('', '', 'toolbar=no,memubar=no,scrollbars=yes,status=no,width=' + width + 'px,height=' + height + "px'");
+
+        DispWin.document.write('<html><head>');
+        if (style == true) {
+            for (var i = 0; i < document.styleSheets.length; i++) {
+                if (document.styleSheets[i].href != null) {
+                    DispWin.document.write('<link rel="stylesheet" type="text/css" href="' + document.styleSheets[i].href + '">');
+                }
+            }
+        }
+        DispWin.document.write('</head>');
+        DispWin.document.write('<body>');
+        DispWin.document.write('<p style="text-align:right" align="center"><input type="button" value="Close" onclick="window.close()"/>&nbsp&nbsp&nbsp&nbsp<input type="button" value="Print" onclick="print()"/></p>');
+
+        DispWin.document.write('<br>');
+        DispWin.document.write($(obj.$f(id)).formhtml());
+        DispWin.document.write('</body></html>');
+        DispWin.document.close();
+//DispWin.close();
+//DispWin.print();
+    }
+
+    (function ($) {
+        var oldHTML = $.fn.html;
+
+        $.fn.formhtml = function () {
+            if (arguments.length) return oldHTML.apply(this, arguments);
+            $("input,button", this).each(function () {
+                this.setAttribute('value', this.value);
+                this.setAttribute('readonly', true);
+            });
+            $("textarea", this).each(function () {
+                // updated - thanks Raja!
+                this.innerHTML = this.value;
+            });
+            $("input:radio,input:checkbox", this).each(function () {
+                // im not really even sure you need to do this for "checked"
+                // but what the heck, better safe than sorry
+                if (this.checked) this.setAttribute('checked', 'checked');
+                else this.removeAttribute('checked');
+            });
+            $("option", this).each(function () {
+                // also not sure, but, better safe...
+                if (this.selected) this.setAttribute('selected', 'selected');
+                else this.removeAttribute('selected');
+            });
+            return oldHTML.apply(this);
+        };
+
+        //optional to override real .html() if you want
+        // $.fn.html = $.fn.formhtml;
+    })(jQuery);
+
+
+    ]]>
+</script>

@@ -1,0 +1,322 @@
+<script type="text/Javascript">
+<![CDATA[
+var searchMap;
+var resultsMap;
+var mousePosition;
+var mOptions;
+var cOptions = {
+    strokeColor: '#FECA5D',
+    strokeWeight: 1,
+    strokeOpacity: 0.7,
+    fillColor: '#FECA5D',
+    fillOpacity: 0.4,
+    editable: true
+};
+var icons;
+var cursors;
+var drawingManager;
+var infoWindow;
+var searchCircle;
+var overlaysArray = [];
+var rpath;
+var spath;
+var routesHash = new HashTable({});
+
+// load the google api loader
+if (typeof(google) == 'undefined' || !google.load) {
+    jq.getScript('https://www.google.com/jsapi', function () {
+        loadMaps();
+    });
+}
+else {
+    // otherwise just load maps
+    loadMaps();
+}
+
+// load the google maps api
+function loadMaps() {
+    google.load("maps", "3", {
+        callback: initialize,
+        language: 'el',
+        other_params: 'sensor=false&libraries=drawing,geometry'
+    });
+}
+
+function initialize() {
+    google.maps.visualRefresh = true;
+    jq('#results-map-canvas').hide();
+
+
+    mOptions = {
+        center: new google.maps.LatLng(38.035348, 23.708834),
+        zoom: 17,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false
+    };
+
+    infoWindow = new google.maps.InfoWindow({
+        content: ''
+    });
+
+    searchMap = new google.maps.Map(document.getElementById("search-map-canvas"), mOptions);
+
+    resultsMap = new google.maps.Map(document.getElementById("results-map-canvas"), mOptions);
+
+    google.maps.event.addListener(searchMap, 'mousemove', function (event) {
+        mousePosition = event.latLng;
+        if (searchCircle != null) {
+            jq("#distance").html(parseInt(google.maps.geometry.spherical.computeDistanceBetween(searchCircle.getCenter(), mousePosition), 10));
+        }
+    });
+
+    google.maps.event.addListener(resultsMap, 'mousemove', function (event) {
+        mousePosition = event.latLng;
+    });
+
+    drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: null,
+        drawingControl: true,
+        drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: [
+                google.maps.drawing.OverlayType.CIRCLE
+            ]
+        },
+        circleOptions: cOptions
+    });
+    drawingManager.setMap(searchMap);
+
+    google.maps.event.addListener(drawingManager, 'circlecomplete', function (circle) {
+
+        google.maps.event.addListener(circle, 'radius_changed', function (v_circle) {
+            jq("#radius").html(parseInt(searchCircle.getRadius(), 10));
+        });
+        google.maps.event.addListener(circle, 'center_changed', function (v_circle) {
+            searchCircle = this;
+            jq("#radius").html(parseInt(searchCircle.getRadius(), 10));
+        });
+        google.maps.event.addListener(circle, 'mouseover', function (v_circle) {
+            mousePosition = v_circle.latLng;
+            jq("#distance").html(parseInt(google.maps.geometry.spherical.computeDistanceBetween(searchCircle.getCenter(), v_circle.latLng), 10));
+        });
+
+        searchCircle = circle;
+
+        drawingManager.setOptions({
+            drawingMode: null,
+            drawingControl: false
+        });
+
+        jq("#radius").html(parseInt(searchCircle.getRadius(), 10));
+    });
+
+    var finishControlDiv = document.createElement('div');
+    var finishControl = new RadiusLabel(finishControlDiv, searchMap);
+    finishControlDiv.index = 1;
+    searchMap.controls[google.maps.ControlPosition.TOP_RIGHT].push(finishControlDiv);
+
+}
+
+function doSearch() {
+    if (searchCircle != null) {
+        var val = searchCircle.getCenter() + "|" + searchCircle.getRadius();
+        populateZKTextbox('coordsHolder', val);
+    } else {
+        populateZKTextbox('coordsHolder', null);
+
+    }
+
+    var w = zk.Widget.$('$coordsHolder');
+    zAu.send(new zk.Event(w, 'onChanging', null, {toServer: true}));
+}
+
+function doLoad() {
+    rpath = zk.Widget.$('$routePath').getValue();
+    spath = zk.Widget.$('$stopPoints').getValue();
+}
+
+function doPreview() {
+    var i, j;
+    var pathParam = zk.Widget.$('$mapData').getValue();
+    var paths = pathParam.split("$");
+    var routeId;
+    var coords;
+    var stops;
+    var polyline;
+    var marker;
+    var routePath = [];
+    var pathData = [];
+    var infoText;
+    var color;
+
+    jq('#results-map-canvas').show();
+    google.maps.event.trigger(resultsMap, 'resize');
+
+    while (overlaysArray[0]) {
+        overlaysArray.pop().setMap(null);
+    }
+
+    for (i = 0; i < paths.length; i++) {
+        pathData = paths[i].split("*");
+        routeId = pathData[0];
+        coords = pathData[1].split("|");
+        stops = pathData[2].split("|");
+        infoText = pathData[3];
+
+
+        for (j = 1; j < coords.length; j = j + 2) {
+            routePath.push(new google.maps.LatLng(coords[j - 1], coords[j]));
+        }
+
+        color = getRandomColor('hex');
+
+        polyline = new google.maps.Polyline({
+            path: routePath.slice(0),
+            strokeColor: color,
+            strokeOpacity: 0.7,
+            strokeWeight: 2,
+            map: resultsMap,
+            customInfo: infoText,
+            customId: routeId
+
+        });
+
+        google.maps.event.addListener(polyline, "click", function (polyline) {
+            populateZKTextbox('coordsHolder', this.customId);
+
+            var w = zk.Widget.$('$routeData');
+            zAu.send(new zk.Event(w, 'onChanging', null, {toServer: true}));
+        });
+
+        google.maps.event.addListener(polyline, "mouseover", function (polyline) {
+            infoWindow.setPosition(mousePosition);
+            infoWindow.setContent(this.customInfo);
+            infoWindow.open(resultsMap);
+        });
+
+        google.maps.event.addListener(polyline, "mouseout", (function (polyline) {
+            infoWindow.setContent('');
+            infoWindow.close();
+        }));
+
+        overlaysArray.push(polyline);
+        routesHash.setItem(routeId, polyline);
+
+        addPreviewMarker(routeId, routePath[0], 'A', infoText, color.replace('#', ''), resultsMap, 1);
+        addPreviewMarker(routeId, routePath[routePath.length - 1], 'Π', infoText, color.replace('#', ''), resultsMap, 1);
+
+        for (j = 1; j < stops.length; j = j + 2) {
+            addPreviewMarker(routeId, new google.maps.LatLng(stops[j - 1], stops[j]), 'S', infoText, color.replace('#', ''), resultsMap, 2);
+        }
+
+        if (i === 0) {
+            var bounds = new google.maps.LatLngBounds(routePath[0], routePath[routePath.length - 1]);
+            resultsMap.fitBounds(bounds);
+        }
+
+        routePath.length = 0;
+    }
+}
+
+function addPreviewMarker(id, pos, label, infoText, color, map, type) {
+    var marker = new google.maps.Marker({
+        position: pos,
+        icon: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + label + '|' + color + '|000000',
+        map: map,
+        draggable: false,
+        customInfo: infoText,
+        customGeocoded: false,
+        customGeoInfo: '',
+        customId: id
+    });
+
+    google.maps.event.addListener(marker, "click", function (event) {
+        populateZKTextbox('routeData', this.customId);
+
+        var w = zk.Widget.$('$routeData');
+        zAu.send(new zk.Event(w, 'onChanging', null, {toServer: true}));
+    });
+
+    if (type === 2) {
+
+        google.maps.event.addListener(marker, "mouseover", (function (event) {
+            return function () {
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({'latLng': this.getPosition()}, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[0]) {
+                            marker.customGeoInfo = results[0].formatted_address;
+                            textInfo = '<div style="border-bottom: 1px solid red; padding-bottom: 2px"><label style="font-weight: bold;">Στάση: </label>' + marker.customGeoInfo + '</div>' + marker.customInfo;
+                            infoWindow.setPosition(mousePosition);
+                            infoWindow.setContent('<div style="padding: 3px">' + textInfo + '</div>');
+                            infoWindow.open(resultsMap);
+                        }
+                    }
+                });
+            }
+        })(marker));
+
+    } else {
+        google.maps.event.addListener(marker, "mouseover", function (marker) {
+            infoWindow.setPosition(mousePosition);
+            infoWindow.setContent('<div style="padding: 3px">' + this.customInfo + '</div>');
+            infoWindow.open(resultsMap);
+        });
+    }
+
+    google.maps.event.addListener(marker, "mouseout", (function (event) {
+        infoWindow.setContent('');
+        infoWindow.close();
+    }));
+
+    overlaysArray.push(marker);
+}
+
+function RadiusLabel(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.className = 'toolbar_button';
+    controlUI.id = 'finish_control';
+    controlUI.innerHTML = '<div>' +
+            '<div style="text-align: right">Απόσταση: <label id="distance">0</label> μέτρα</div>' +
+            '<div style="text-align: right">Ακτίνα: <label id="radius">0</label> μέτρα</div>' +
+            '</div>';
+    controlDiv.appendChild(controlUI);
+
+}
+
+function doBoundMap(id) {
+    var pline = routesHash.getItem(id);
+    var path = pline.getPath().getArray();
+    var bounds = new google.maps.LatLngBounds(path[0], path[path.length - 1]);
+    resultsMap.fitBounds(bounds);
+}
+
+function doClearAll() {
+    jq('#results-map-canvas').hide();
+    while (overlaysArray[0]) {
+        overlaysArray.pop().setMap(null);
+    }
+    searchCircle.setMap(null);
+    searchCircle = null;
+
+    routesHash.clear();
+
+    drawingManager.setOptions({
+        drawingMode: null,
+        drawingControl: true
+    });
+}
+
+function doClearResults() {
+    jq('#results-map-canvas').hide();
+    while (overlaysArray[0]) {
+        overlaysArray.pop().setMap(null);
+    }
+    routesHash.clear();
+}
+
+]]>
+</script>

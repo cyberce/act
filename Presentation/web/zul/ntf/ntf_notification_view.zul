@@ -1,0 +1,133 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.ntf.ViewNotificationVM')"
+		>
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px dotted #434E9E;
+		border-top: 1px dotted #434E9E;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="50%, 50%">
+				<label sclass="headerText" value="${labels.notifications.view}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/back.png" onClick="@command('onBack')" />
+					<toolbarbutton image="/img/transition.png" onClick="@command('onTransition')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<grid style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.notifications.dateTime}:" />
+						<label value="@load(vm.notification.sentDate) @converter('formatedDate', format='dd/MM/yyyy : HH:mm')"
+						       sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.notifications.type}:" />
+						<label value="@load(vm.notification.typeString)" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.notifications.title}:" />
+						<label value="@load(vm.notification.title)" sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.notifications.text}:" />
+						<label value="@load(vm.notification.body)" sclass="labelNSBlackNormal" width="90%" />
+					</row>
+				</rows>
+			</grid>
+			<separator height="50px" />
+			<label id="action.inputs" value="${labels.action.inputs}"
+			       style="padding-left: 10px; font-size: 20px"
+			       width="90%" />
+			<separator height="10px" />
+			<grid style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.action.code}:" />
+						<label value="@load(vm.notification.event.code)" sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.action.title}:" />
+						<label value="@load(vm.notification.event.eventTitle)" sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.action.startingDate}:" />
+						<label value="@load(vm.notification.event.dateFrom) @converter('formatedDate', format='dd/MM/yyyy : HH:mm')"
+						       sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.action.endingDate}:" />
+						<label value="@load(vm.notification.event.dateTo) @converter('formatedDate', format='dd/MM/yyyy : HH:mm')"
+						       sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.action.place}:" />
+						<label id="flexibleLabel" value="@load(vm.notification.event.eventLocation)"
+						       sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.listing.productPrice}:" />
+						<label value="@load(vm.notification.event.priceWithCurrency) "
+						       sclass="labelNSBlackNormal" width="90%" />
+					</row>
+				</rows>
+			</grid>
+			<separator height="50px" />
+			<label id="notificationCriteriaLabel" visible="false" value="${labels.notificationsCriteria.values}"
+			       style="padding-left: 10px; font-size: 20px"
+			       width="90%" />
+			<separator height="10px" />
+			<grid style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows id="notificationCriteriaDetails">
+				</rows>
+			</grid>
+		</div>
+	</div>
+
+</window>

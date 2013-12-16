@@ -1,0 +1,54 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window id="feedDataViewWin"
+        self="@define(detail)"
+        border="normal"
+        width="720px"
+        mode="modal"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.ViewFeedDataVM')">
+
+	<div>
+		<div align="left" width="100%">
+			<separator height="4px" />
+			<hbox width="100%" widths="70%, 30%">
+				<label sclass="headerText" value="${labels.action.externalView}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/cancel20.png" onClick="@command('onClose')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<grid style="border: 0">
+				<columns>
+					<column width="30%" />
+					<column width="70%" />
+				</columns>
+				<rows>
+					<row sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold" value="${labels.feed.title}" />
+						<label value="@load(vm.feedData.title)" sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold" value="${labels.feed.description}" />
+						<label value="@load(vm.feedData.description)" sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold" value="${labels.feed.publicationDate}" />
+						<label value="@load(vm.feedData.publicationDate) @converter('formatedDate', format='dd/MM/yyyy')"
+						       sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.action.url}:" />
+						<a href="@load(vm.feedData.url)" label="@load(vm.feedData.url)" target="_blank" />
+					</row>
+				</rows>
+			</grid>
+		</div>
+	</div>
+
+</window>

@@ -1,0 +1,105 @@
+<script type="text/Javascript">
+    <![CDATA[
+    var map;
+    var actionMode;
+    var mOptions;
+    var cOptions = {
+        strokeColor: '#FECA5D',
+        strokeWeight: 1,
+        strokeOpacity: 0.7,
+        fillColor: '#FECA5D',
+        fillOpacity: 0.4,
+        editable: true
+    };
+    var drawingManager;
+    var searchCircle;
+    var markerData;
+
+    // load the google api loader
+    if (typeof(google) == 'undefined' || !google.load) {
+        jq.getScript('//www.google.com/jsapi', function () {
+            loadMaps();
+        });
+    }
+    else {
+        // otherwise just load maps
+        loadMaps();
+    }
+
+    // load the google maps api
+    function loadMaps() {
+        google.load("maps", "3", {
+            callback: initialize,
+            language: 'el',
+            other_params: 'sensor=false&libraries=drawing'
+        });
+    }
+
+    function initialize() {
+        google.maps.visualRefresh = true;
+
+        mOptions = {
+            center: new google.maps.LatLng(38.035348, 23.708834),
+            zoom: 17,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false,
+            streetViewControl: false
+        };
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mOptions);
+        google.maps.event.trigger(map, 'resize');
+
+        drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: null,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [
+                    google.maps.drawing.OverlayType.CIRCLE
+                ]
+            },
+            circleOptions: cOptions
+        });
+        drawingManager.setMap(map);
+
+        google.maps.event.addListener(drawingManager, 'circlecomplete', function (circle) {
+
+//			google.maps.event.addListener(circle, 'radius_changed', function (v_circle) {
+//				jq("#radius").html(parseInt(searchCircle.getRadius(), 10));
+//			});
+//			google.maps.event.addListener(circle, 'center_changed', function (v_circle) {
+//				searchCircle = this;
+//				jq("#radius").html(parseInt(searchCircle.getRadius(), 10));
+//			});
+//			google.maps.event.addListener(circle, 'mouseover', function (v_circle) {
+//				mousePosition = v_circle.latLng;
+//				jq("#distance").html(parseInt(google.maps.geometry.spherical.computeDistanceBetween(searchCircle.getCenter(), v_circle.latLng), 10));
+//			});
+
+            searchCircle = circle;
+
+            drawingManager.setOptions({
+                drawingMode: null,
+                drawingControl: false
+            });
+
+//			jq("#radius").html(parseInt(searchCircle.getRadius(), 10));
+        });
+
+    }
+
+    function doAccept() {
+        if (searchCircle != null) {
+            var val = searchCircle.getCenter() + "|" + searchCircle.getRadius();
+            populateZKTextbox('coordsHolder', val);
+        } else {
+            populateZKTextbox('coordsHolder', null);
+
+        }
+
+        var w = zk.Widget.$('$coordsHolder');
+        zAu.send(new zk.Event(w, 'onChanging', null, {toServer: true}));
+    }
+
+    ]]>
+</script>

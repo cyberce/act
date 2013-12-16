@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="calendar">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/zk_calendar" />
+      <root url="file://$PROJECT_DIR$/lib/zk_calendar" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/zk_calendar" recursive="false" />
+  </library>
+</component>

@@ -1,0 +1,127 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.user.ListUserActionsVM')">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<div sclass="detail">
+		<div align="left" width="100%">
+			<hbox width="100%" widths="5%, 95%">
+
+				<label sclass="headerText" value="${labels.user.actions}" />
+			</hbox>
+			<separator height="10px" />
+			<groupbox form="@id('fx') @save(vm.userActionSearchCriteria, before={'onSearch', 'onResetSearch'} )"
+			          id="gb3" mold="3d" width="100%" open="false">
+				<attribute name="onOpen">
+					<![CDATA[
+                      import org.zkoss.util.resource.Labels;
+
+                      searchHeader.value = self.isOpen()? Labels.getLabel("search.title_hide") : Labels.getLabel("search.title_show");
+                      searchCaption.label = self.isOpen()? Labels.getLabel("search.criteria") : Labels.getLabel("search.click_here");
+                  ]]>
+				</attribute>
+				<caption id="searchCaption" label="${labels.search.click_here}"></caption>
+				<separator height="10px" />
+				<hbox width="100%" widths="30%,30%,40%">
+					<div>
+						<label sclass="labelNSGrayNormal" value="${labels.user.actionDate}" />
+						<separator height="5px" />
+						<div>
+							<label sclass="labelNSGrayNormal" value="${labels.route.dateFrom}:" />
+							<separator height="5px" />
+							<datebox id="dateFrom" constraint="no empty: Το πεδίο δεν μπορεί να παραμείνει κενό"
+							         cols="12" format="short " mold="rounded"
+							         value="@bind(vm.userActionSearchCriteria.dateFrom)" />
+						</div>
+						<div>
+							<label sclass="labelNSGrayNormal" value="${labels.route.dateTo}:" />
+							<separator height="5px" />
+							<datebox id="dateTo" constraint="no empty: Το πεδίο δεν μπορεί να παραμείνει κενό" cols="12"
+							         format="short " mold="rounded"
+							         value="@bind(vm.userActionSearchCriteria.dateTo)" />
+						</div>
+					</div>
+					<div>
+						<hbox>
+							<label value="${labels.common.paging}:" />
+							<intbox value="@bind(vm.paging.pageSize)" />
+						</hbox>
+					</div>
+					<div>
+					</div>
+				</hbox>
+				<separator height="20px" />
+				<hbox width="100%" widths="40%,50%,10%">
+					<div></div>
+					<div>
+						<toolbarbutton image="/img/search.png"
+						               onClick="@command('onSearch')" />
+						<space width="20px" />
+						<toolbarbutton image="/img/reset.png"
+						               onClick="@command('onResetSearch')" />
+					</div>
+					<div></div>
+				</hbox>
+			</groupbox>
+			<separator height="20px" />
+			<div align="right">
+				<hbox>
+					<toolbarbutton id="viewButton" image="/img/view.png" onClick="@command('onView')"
+					               disabled="@load(empty vm.selectedUserAction)" />
+				</hbox>
+			</div>
+			<listbox model="@load(vm.userActionsList)" paginal="@{paging}"
+			         selectedItem="@bind(vm.selectedUserAction)" id="userActionsListbox" width="99%"
+			         context="contextPopup">
+				<listhead>
+					<listheader id="date" label="${labels.user.actionDate}" width="25%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="fullName" label="${labels.user.fullname}" width="25%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="userName" label="${labels.user.username}" width="25%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="type" label="${labels.user.action}" width="25%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.date) @converter('formatedDate', format='dd/MM/yyyy')"
+						          style="text-align: center;" />
+						<listcell label="@load(item.user.fullName)" style="text-align: center;"/>
+						<listcell label="@load(item.user.userName)" style="text-align: center;"/>
+						<listcell label="Δημιουργία δράσης" if="${item.type==0}" style="text-align: center;"/>
+						<listcell label="Διαγραφή δράσης" if="${item.type==1}" style="text-align: center;"/>
+						<listcell label="Είσοδος στην Υπηρεσία" if="${item.type==3}" style="text-align: center;"/>
+					</listitem>
+				</template>
+			</listbox>
+			<label id="empty" value="${labels.user.noActions}" visible="false"></label>
+			<paging id="paging" mold="os" detailed="true" onPaging="@command('onPaging')" />
+		</div>
+	</div>
+</window>

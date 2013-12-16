@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="hibernate-spatial-4.0-M1">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/hibernate-spatial-4" />
+      <root url="file://$PROJECT_DIR$/lib/hibernate-spatial-4" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/hibernate-spatial-4" recursive="false" />
+  </library>
+</component>

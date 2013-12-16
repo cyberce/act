@@ -1,0 +1,127 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.CreateActionNotificationCriteriaVM')"
+        validationMessages="@id('vmsgs')">
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px solid #FFFFFF;
+		border-top: 1px solid #FFFFFF;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div form="@id('fx') @load(vm.eventNotificationCriteria) @save(vm.eventNotificationCriteria, before='onSave')"
+	     sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="@load(not empty fx.id? '50%, 50%': '50%, 50%')">
+				<label sclass="headerText" value="${labels.notification.criteria.create}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/save.png" onClick="@command('onSave')" />
+					<toolbarbutton image="/img/cancel.png" onClick="@command('onCancel')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<grid oddRowSclass="non-odd" style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.notifications.criteria.title}* :" />
+						<vbox>
+							<label multiline="true" width="100%" sclass="labelMandatory"
+							       value="@load(vmsgs['fx_lastName'])" />
+							<textbox maxlength="300" width="430px" tabindex="1" mold="rounded" value="@bind(fx.title)"
+							         constraint="no empty: Το πεδίο θα πρέπει να συμπληρωθεί υποχρεωτικά" />
+						</vbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.notifications.criteria.description}:" />
+						<hbox>
+							<textbox rows="1" multiline="true" maxlength="2000" width="430px"
+							         tabindex="1" mold="rounded" value="@bind(fx.description)" />
+						</hbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label value="${labels.action.theme} :" />
+						<tree id="tree" checkmark="true" selectedItems="@bind(vm.selectedItems)"
+						      width="50%">
+						</tree>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.action.startDate}:" />
+						<vbox>
+							<label multiline="true" width="100%" sclass="labelMandatory"
+							       value="@load(vmsgs['fx_lastName'])" />
+							<hbox>
+								<datebox cols="12"
+								         format="dd/MM/yyyy " mold="rounded" width="200px"
+								         value="@bind(vm.eventNotificationCriteria.dateFrom)" />
+							</hbox>
+						</vbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.action.endDate}:" />
+						<vbox>
+							<label multiline="true" width="100%" sclass="labelMandatory"
+							       value="@load(vmsgs['fx_lastName'])" />
+							<hbox>
+								<datebox cols="12"
+								         format="dd/MM/yyyy" mold="rounded" width="200px"
+								         value="@bind(vm.eventNotificationCriteria.dateTo)" />
+							</hbox>
+						</vbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.action.amea}:" />
+						<vbox>
+							<hbox>
+								<radiogroup width="100%" id="itemTransRG" onCheck="@command('onToggleTrueFalse')"
+								            selectedItem="@bind(vm.eventNotificationCriteria.disabledAccess) @converter('org.teiath.web.converter.RadiogroupBooleanConverter')">
+									<radio value="true" label="${labels.common.yes}"
+									       radiogroup="itemTransRG"
+									       tabindex="1" />
+									<radio value="false" label="${labels.common.no}"
+									       radiogroup="itemTransRG"
+									       tabindex="2" />
+								</radiogroup>
+								<radiogroup width="100%" id="emptyRG" onCheck="@command('onToggleNotSpecified')">
+									<radio value="true" label="${labels.common.not_specified}"
+									       radiogroup="emptyRG"
+									       tabindex="1" />
+								</radiogroup>
+							</hbox>
+						</vbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal"
+						       value="${labels.notifications.goods.keywords}:" />
+						<vbox>
+							<textbox id="tags" rows="1" multiline="true" maxlength="2000" width="430px" tabindex="1"
+							         mold="rounded" value="@bind(vm.eventNotificationCriteria.keywords)" />
+						</vbox>
+					</row>
+				</rows>
+			</grid>
+		</div>
+	</div>
+
+</window>

@@ -1,0 +1,72 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.user.UserAddRolesVM')"
+        validationMessages="@id('vmsgs')">
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px solid #FFFFFF;
+		border-top: 1px solid #FFFFFF;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div form="@id('fx') @load(vm.user) @save(vm.user, before='onSave')" sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="@load(not empty fx.id? '50%, 50%': '50%, 50%')">
+				<label sclass="headerText" value="${labels.user.role.add}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/save.png" onClick="@command('onSave')" />
+					<toolbarbutton image="/img/cancel.png" onClick="@command('onCancel')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<hlayout height="300px" style="padding:10px">
+				<listbox id="availableRolesLB" model="@load(vm.availableRoles)" vflex="true" width="400px"
+				         multiple="true" rows="8">
+					<listhead>
+						<listheader label="${labels.user.role.available}" />
+					</listhead>
+					<template name="model" var="item">
+						<listitem>
+							<listcell label="@load(item.name)" />
+						</listitem>
+					</template>
+				</listbox>
+				<vbox spacing="10px">
+					<image style="cursor:pointer" id="chooseAllBtn" src="/img/rightrightarrow_g.png"
+					       onClick="@command('onChooseAllBtnClick')" />
+					<image style="cursor:pointer" id="chooseBtn" src="/img/rightarrow_g.png"
+					       onClick="@command('onChooseBtnClick')" />
+					<image style="cursor:pointer" id="removeBtn" src="/img/leftarrow_g.png"
+					       onClick="@command('onRemoveBtnClick')" />
+					<image style="cursor:pointer" id="removeAllBtn" src="/img/leftleftarrow_g.png"
+					       onClick="@command('onRemoveAllBtnClick')" />
+				</vbox>
+				<listbox id="selectedRolesLB" model="@load(vm.selectedRoles)" vflex="true" width="400px" multiple="true"
+				         rows="8">
+					<listhead>
+						<listheader label="${labels.user.role.selected}"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="${each.name }" />
+						</listitem>
+					</template>
+				</listbox>
+			</hlayout>
+		</div>
+	</div>
+</window>

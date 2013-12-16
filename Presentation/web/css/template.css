@@ -1,0 +1,1246 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
+.z-calendars-month-date-cnt {
+    font-weight: bold;
+}
+
+/*Metro UI */
+.z-paging-os {
+    background: none repeat scroll 0 0 #fff;
+}
+
+.viewGrid {
+    border: 0;
+    width: 800px;
+}
+
+.z-groupbox-3d-hm {
+    background-image: none;
+    border-color: #C5C5C5;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+}
+
+tr.z-listbox-odd {
+    background: none repeat scroll 0 0 #FFF;
+}
+
+td.z-listcell {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #CFCFCF;
+    border-image: none;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    vertical-align: middle;
+}
+
+td.z-listcell {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #CFCFCF;
+    border-image: none;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    vertical-align: middle;
+}
+
+div.z-listbox-header th.z-listheader-sort div.z-listheader-cnt {
+    height: 30px;
+    vertical-align: middle;
+}
+
+tr.z-listitem-seld, tr.z-listbox-odd tr.z-listitem-seld {
+    background-image: none;
+    background-color: #D6D6D5;
+    padding: 0;
+    border: 0;
+}
+
+tr.z-listitem-over, tr.z-listgroup-over, tr.z-listbox-odd tr.z-listitem-over, tr.z-listbox-odd tr.z-listgroup-over {
+    background-image: none;
+    background-color: #D6D6D5;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+div.z-listbox-header th.z-listheader-sort div.z-listheader-cnt {
+    height: 30px;
+    vertical-align: middle;
+}
+
+tr.z-listitem-seld, tr.z-listbox-odd tr.z-listitem-seld {
+    background-image: none;
+    background-color: #D6D6D5;
+    padding: 0;
+    border: 0;
+}
+
+tr.z-listitem-over, tr.z-listgroup-over, tr.z-listbox-odd tr.z-listitem-over, tr.z-listbox-odd tr.z-listgroup-over {
+    background-image: none;
+    background-color: #D6D6D5;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+/* */
+
+.labelNSGrayBold {
+    font-weight: bold;
+    text-align: left;
+}
+
+.labelNSGrayBold16 {
+    font-weight: bold;
+    text-align: left;
+    font-size: 16px;
+}
+
+.labelNSGrayBold14 {
+    font-weight: bold;
+    text-align: left;
+    font-size: 14px;
+}
+
+.labelMandatory {
+    color: red;
+    font-family: Verdana, Tahoma, Arial, serif;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.textLabel {
+    Snapped-view: Body text;
+    Font-family: Segoe UI, Verdana;
+    Font-size: 11pt;
+    color: rgba(0, 0, 0, 1.0);
+    line-height: 18px;
+    margin: 0 0 9px;
+}
+
+.secondaryTextLabel {
+    Font-family: Segoe UI, Verdana;
+    Font-size: 10pt;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 18px;
+    margin: 0 0 9px;
+}
+
+.tos-label-active {
+    color: #1127ff;;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.auxMaterial-label {
+    color: #070707;
+    font-size: 12px;
+    font-weight: bold
+}
+
+.auxMaterial-label-active {
+    color: #1118ff;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.footer-label {
+    font: Arial;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold
+}
+
+.footer-label-active {
+    font: Arial;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.twitterLabel {
+
+    Font-family: Segoe UI Light, Verdana;
+    Font-size: 20pt;
+    color: rgba(0, 0, 0, 1.0);
+}
+
+.z-hlayout-inner {
+    padding-right: 15px;
+}
+
+.z-vlayout-inner {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+body {
+    line-height: 1.07em;
+    color: black;
+    background: #F0F0F0;;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+body, p, td, ul, ol, th, div {
+    font-family: Verdana, Arial;
+    font-size: 11px;
+    color: #5e5e5e;
+}
+
+img {
+    border: 0;
+}
+
+a {
+    font-family: Verdana, Arial;
+    text-decoration: none;
+}
+
+a:link, a:visited {
+    color: #3151A2;
+}
+
+a:hover, a:active {
+    color: #0c325f;
+}
+
+.button {
+    font-size: 11px;
+    border: 1px solid #adb6bf;
+    background-color: #FFFFFF;
+    float: right;
+}
+
+.root {
+    text-align: center;
+    margin-top: 20px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    background-color: #FFFFFF;
+    width: 1200px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 3px 3px 4px #000;
+    -webkit-box-shadow: 3px 3px 4px #000;
+    box-shadow: 3px 3px 4px #000;
+    /* For IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
+    /* For IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+}
+
+.wrapper {
+    width: 938px;
+    text-align: left;
+}
+
+.header {
+    /*
+               clear: both;
+               background-color:#96866D;
+               */
+}
+
+.headerimg {
+    width: 100%;
+    height: 125px;
+    background: url(../img/menu-bar-bkgd2.png) repeat;
+    -moz-border-radius-topleft: 10px;
+    border-top-left-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    border-top-right-radius: 10px;
+}
+
+.carimg {
+    width: 100%;
+    height: 150px;
+    background: url(../img/evt_banner.png) no-repeat;
+    -moz-border-radius-topleft: 10px;
+    border-top-left-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    border-top-right-radius: 10px;
+
+}
+
+.link {
+    position: absolute;
+    width: 70px;    /* width of the logo */
+    height: 70px;   /* height of the logo */
+    top: 0; left: 0; /* top-left corner of logo */
+    border: 0;
+    float: left;
+}
+
+.detail {
+    position: relative;
+    left: 15px;
+    top: 5px;
+    width: 98%
+}
+
+.subHeaderText {
+    position: relative;
+    left: 5px;
+    font-family: Segoe UI, Verdana;
+    font-size: 14pt;
+    color: #454545;
+    font-weight: bold;
+}
+
+.headerText {
+    position: relative;
+    left: 5px;
+    font-family: Segoe UI, Verdana;
+    font-size: 20pt;
+    color: #f58027;
+    font-weight: bold;
+}
+
+.headerTextMobile {
+    position: relative;
+    left: 5px;
+    font-family: Segoe UI, Verdana;
+    font-size: 9pt;
+    color: #f58027;
+    font-weight: bold;
+}
+
+.headerText1 {
+    position: absolute;
+    top: 28px;
+    left: 11px;
+    font-size: 38px;
+    color: #FECA5D;
+    text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 3px 0px #444, 0px 4px 0px #333, 0px 5px 7px #001135;
+}
+
+.headerText2 {
+    position: absolute;
+    top: 28px;
+    left: 600px;
+    font-size: 30px;
+    color: #fff;
+    text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 3px 0px #444, 0px 4px 0px #333, 0px 5px 7px #001135;
+}
+
+.subheader-bar-container {
+    width: 100%;
+    /*margin-top:20px;	*/
+    background-image: url('../img/bkgd-header-bar1.jpg');
+    background-repeat: repeat;
+    background-color: #96866D;
+}
+
+.subheader {
+    background-image: url('../img/menu-bar-bkgd4.png');
+    background-repeat: no-repeat;
+    height: 30px;
+    padding-top: 14px;
+    padding-left: 5px;
+    background-repeat: no-repeat;
+}
+
+.social-links {
+    text-align: right;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.social-links img {
+    vertical-align: middle;
+}
+
+.footer-container {
+    width: 1200px;
+    border-top: 1px dotted #CCCCCC;
+    background: white;
+    background-image: url('../img/evt_footer.png');
+    background-repeat: repeat;
+}
+
+.footer-container table {
+    width: 100%;
+    padding-top: 5px;
+}
+
+.footer-container table td {
+    font-size: 11px;
+    vertical-align: top;
+    padding-left: 3px;
+    padding-right: 3px;
+    color: #000000;
+}
+
+.footer-bar-container {
+    width: 1200px;
+    /*margin-top:20px;	*/
+    background-image: url('../img/bkgd-header-bar1.jpg');
+    background-repeat: repeat;
+}
+
+.footer-bar {
+    background-image: url('../img/menu-bar-bkgd4.png');
+    background-repeat: no-repeat;
+    height: 50px;
+}
+
+.login {
+    /*width: 169px;*/
+    /*height: 220px;*/
+    vertical-align: middle;
+}
+
+.linkTextLabel {
+    Font-family: Segoe UI, Verdana;
+    Font-size: 10pt;
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: underline;
+    line-height: 18px;
+    margin: 0 0 9px;
+}
+
+.secondaryTextLabelActive {
+    Font-family: Segoe UI, Verdana;
+    Font-size: 10pt;
+    color: #1127ff;;
+    text-decoration: underline;
+    cursor: pointer;
+    line-height: 18px;
+    margin: 0 0 9px;
+}
+
+
+/*--------------------*/
+
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+/*--------------------*/
+
+.inputs input {
+    font-size: 11px;
+    background: #f1f1f1 url(../img/login-sprite.png) no-repeat;
+    padding: 5px 5px 5px 25px;
+    margin: 0 0 5px 0;
+    width: 120px; /* 353 + 2 + 45 = 400 */
+    border: 1px solid #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+    -webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+    box-shadow: 0 1px -1px #ccc inset, 0 1px 0 #fff;
+}
+
+.username {
+    background-position: 5px -13px !important;
+}
+
+.password {
+    background-position: 5px -62px !important;
+}
+
+.inputs input:focus {
+    background-color: #fff;
+    border-color: #e8c291;
+    outline: none;
+    -moz-box-shadow: 0 0 0 1px #e8c291 inset;
+    -webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+    box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+/*--------------------*/
+.actions {
+    /*  margin: 25px 0 0 0;*/
+}
+
+.loggedUser {
+    position: absolute;
+    margin-top: -30px;
+    margin-left: 180px;
+    font-size: 8pt;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .loggedUser {
+        position: absolute;
+        margin-top: 0px;
+        font-size: 8pt;
+    }
+}
+
+.logoutButton {
+    position: absolute;
+    margin-top: -35px;
+    margin-left: 285px;
+}
+
+.menubar {
+    height: 20px;
+    padding: 0;
+    width: 850px;
+    cursor: pointer;
+    font: bold 30px Arial, Helvetica;
+    color: #8f5a0a;
+}
+
+.z-menubar-hor .z-menu, .z-menubar-hor .z-menuitem, .z-menubar-hor .z-menu-btn, .z-menubar-hor .z-menuitem-btn, .z-menubar-hor span, .z-menubar-hor a, .z-menubar-hor div, .z-menubar-ver .z-menu, .z-menubar-ver .z-menuitem, .z-menubar-ver .z-menu-btn, .z-menubar-ver .z-menuitem-btn, .z-menubar-ver span, .z-menubar-ver a, .z-menubar-ver div, .z-menu-cnt, .z-menuitem-cnt {
+    color: rgba(255, 255, 255, 1.0);
+    font-family: Segoe UI, Verdana;;
+    font-size: 11pt;
+}
+
+.z-menuitem-btn {
+    width: 50px;
+    height: 25px;
+}
+
+.z-menubar-hor .z-menu-btn, .z-menubar-hor .z-menu-item-btn, .z-menubar-ver .z-menu-btn, .z-menubar-ver .z-menu-item-btn {
+    color: rgba(255, 255, 255, 1.0);
+    font-family: Segoe UI, Verdana;;
+    font-size: 11pt
+}
+
+.z-menupopup .z-menuitem-cnt .z-menuitem-img {
+    margin-left: 0;
+    margin-right: -5px;
+}
+
+.z-menupopup-cnt .z-menu .z-menu-img, .z-menupopup-cnt .z-menuitem .z-menuitem-img {
+    background-position: center center;
+    border: 0 none;
+    display: inline-block;
+    height: 100%;
+    margin-right: -5px;
+    min-height: 16px;
+    padding: 0;
+    vertical-align: top;
+    width: 16px;
+}
+
+.submenu {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.z-menu-body-over .z-menu-inner-m .z-menu-btn,
+.z-menuitem-body-over .z-menuitem-inner-m .z-menu-btn {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.z-menu-body-seld .z-menu-inner-m,
+.z-menu-item-body-seld .z-menu-item-inner-m {
+    background-repeat: no-repeat;
+    background-position: 0 -80px;
+    background-image: none;
+    overflow: hidden;
+
+}
+
+.z-menuitem-body-img .z-menuitem-inner-m .z-menuitem-btn, .z-menuitem-body-text .z-menuitem-inner-m .z-menuitem-btn {
+    padding-left: 17px;
+    padding-right: 0;
+}
+
+.z-menu-body-over .z-menu-inner-m,
+.z-menu-item-body-over .z-menu-item-inner-m {
+    background-repeat: no-repeat;
+    background-position: 0 -80px;
+    background-image: none;
+    overflow: hidden;
+
+}
+
+.z-menu-body-over .z-menu-inner-l,
+.z-menu-item-body-over .z-menu-item-inner-l,
+.z-menu-body-over .z-menu-inner-r,
+.z-menu-item-body-over .z-menu-item-inner-r {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none;
+
+}
+
+.z-menu-body-seld .z-menu-inner-l,
+.z-menu-item-body-seld .z-menu-item-inner-l,
+.z-menu-body-seld .z-menu-inner-r,
+.z-menu-item-body-seld .z-menu-item-inner-r {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none;
+
+}
+
+.z-menu-body-seld .z-menu-inner-m .z-menu-btn {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.menuitem {
+    background-color: #ffffff;
+
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+
+    height: 23px;
+    padding: 0;
+    width: 200px;
+    cursor: pointer;
+    font: bold 5px Arial, Helvetica;
+    color: #8f5a0a;
+
+}
+
+.z-menu-body-over .z-menu-inner-l,
+.z-menuitem-body-over .z-menuitem-inner-l,
+.z-menu-body-over .z-menu-inner-r,
+.z-menuitem-body-over .z-menuitem-inner-r {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menu-body-over .z-menu-inner-m,
+.z-menuitem-body-over .z-menuitem-inner-m {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menu-over,
+.z-menupopup-cnt .z-menuitem-over {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menu-over a.z-menu-cnt,
+.z-menupopup-cnt .z-menuitem-over a.z-menuitem-cnt {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cl,
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cr,
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cm,
+.z-menupopup-cnt .z-menu-over .z-menu-cl,
+.z-menupopup-cnt .z-menu-over .z-menu-cr,
+.z-menupopup-cnt .z-menu-over .z-menu-cm {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cl {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cr,
+.z-menupopup-cnt .z-menu-over .z-menu-cr {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cm,
+.z-menupopup-cnt .z-menu-over .z-menu-cm {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.z-menupopup-cnt .z-menuitem-over .z-menuitem-cm div {
+    height: 21px;
+}
+
+.submenu {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.z-menupopup-cnt .z-menu-over a.z-menu-cnt,
+.z-menupopup-cnt .z-menuitem-over a.z-menuitem-cnt {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.menupop {
+    background-color: #ffffff;
+    padding: 0;
+    width: 200px;
+    cursor: pointer;
+    font: bold 13px Arial, Helvetica;
+    color: #8f5a0a;
+}
+
+.z-menupopup-cnt .z-menu-over, .z-menupopup-cnt .z-menuitem-over {
+    background: #FFFFFF
+}
+
+.z-menupopup-cnt .z-menu-over a.z-menu-cnt, .z-menupopup-cnt .z-menuitem-over a.z-menuitem-cnt {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.menupop:hover, .menupop:focus, .menupop:visited, .menupop:active {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: none
+}
+
+.menupop::-moz-focus-inner {
+    border: none;
+}
+
+.actions a {
+    line-height: 35px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.copyright {
+    width: 200px;
+    height: 100px;
+    margin: 0px auto -1px auto;
+}
+
+.funds {
+    width: 800px;
+    margin: 0px -25px -1px auto;
+    text-align: center;
+}
+
+.z-menubar-hor {
+
+    background: transparent;
+    border: 5px
+}
+
+/*Toolbar Buttons*/
+.z-toolbarbutton {
+    margin: 0;
+
+}
+
+.z-toolbarbutton-cnt {
+    font-family: Verdana, Tahoma, Arial, serif;
+    font-size: 11px;
+    font-weight: normal;
+    padding: 2px;
+    position: relative;
+}
+
+.z-toolbarbutton-cnt cm {
+    position: relative;
+    right: 5px;
+    top: 8px;
+}
+
+
+/* Smartphones (landscape) ----------- */
+@media only screen
+and (min-width : 321px) and (max-device-width: 640px) and (orientation : landscape) {
+    /* Styles */
+    .root {
+        width: 95%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 70%;
+        zoom: 70%;
+    }
+
+    .innerDetail {
+        width: 50%;
+        zoom: 70%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+    .west {
+        visibility: hidden;
+    }
+
+    .menubar {
+        height: 20px;
+        padding: 0;
+        width: 50%;
+        cursor: pointer;
+        font: bold 30px Arial, Helvetica;
+        color: #8f5a0a;
+    }
+
+    .viewGrid {
+        border: 0;
+
+    }
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (min-width : 321px) and (orientation : portrait) {
+    /* Styles */
+    .root {
+        width: 95%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 45%;
+        zoom: 70%;
+    }
+
+    .innerDetail {
+        width: 50%;
+        zoom: 70%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+    .west {
+        visibility: hidden;
+    }
+
+    .menubar {
+        height: 20px;
+        padding: 0;
+        width: 321px;
+        cursor: pointer;
+        font: bold 30px Arial, Helvetica;
+        color: #8f5a0a;
+    }
+
+    .viewGrid {
+        border: 0;
+        width: 90%;
+    }
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px) {
+    /* Styles */
+    .root {
+        width: 95%;
+    }
+
+
+    .subheader {
+        background: #000000;
+        background-repeat: no-repeat;
+        height: 30px;
+        padding-left: 5px;
+        padding-top: 14px;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: grey;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 100%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+}
+
+
+
+
+/*@media only screen and (max-device-width: 320px) and (orientation:portrait){
+    *//* smartphones, iPhone, portrait 480x320 phones *//*
+    .root {
+        width: 95%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 50%;
+        zoom: 70%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+    .west {
+        visibility: hidden;
+    }
+}
+
+@media only screen and (max-device-width: 480px) and (orientation:portrait){
+    *//* smartphones, iPhone, portrait 480x320 phones *//*
+    .root {
+        width: 95%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 70%;
+        zoom: 80%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+    .west {
+        visibility: hidden;
+    }
+}
+
+@media only screen and (max-device-width: 480px) and (orientation:landscape){
+    *//* smartphones, iPhone, portrait 480x320 phones *//*
+    .root {
+        width: 95%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 75%
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+}
+
+
+@media only screen and (max-device-width: 1024px) and (orientation:landscape){
+    *//* smartphones, iPhone, portrait 480x320 phones *//*
+    .root {
+        width: 95%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 75%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+
+}
+
+@media only screen and (max-device-width: 768px) and (orientation:portrait){
+    *//* smartphones, iPhone, portrait 480x320 phones *//*
+    .root {
+        width: 95%;
+        zoom: 70%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 40%;
+        zoom: 50%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }
+}
+
+@media only screen and (max-device-width: 768px) and (orientation:portrait){
+    *//* smartphones, iPhone, portrait 480x320 phones *//*
+    .root {
+        width: 95%;
+        zoom: 70%;
+    }
+
+    .carimg {
+        width: 100%;
+        height: 150px;
+        background: url(../img/logo_mobile.png) no-repeat;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail {
+        width: 40%;
+        zoom: 50%;
+    }
+
+    .headerText {
+        position: relative;
+        left: 5px;
+        font-family: Segoe UI, Verdana;
+        font-size: 15pt;
+        color: #f58027;
+        font-weight: bold;
+    }
+
+    .footer-bar-container {
+        visibility: hidden;
+    }
+
+    .footer-container {
+        visibility: hidden;
+    }
+
+    .footer-container table {
+        visibility: hidden;
+    }*/
+
+

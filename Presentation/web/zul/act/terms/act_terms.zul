@@ -1,0 +1,26 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/login_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        id="termsWin"
+        self="@define(detail)"
+        border="none"
+        width="1200px">
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<separator height="15px" />
+			<label sclass="headerText" value="${labels.common.messages.services}" />
+			<separator height="25px" />
+			<div width="1150px">
+				<include mode="instant" src="/zul/act/terms/terms.zul" />
+
+			</div>
+			<separator height="15px" />
+		</div>
+	</div>
+
+</window>

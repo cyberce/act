@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProposalAidTypesReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="746b3788-b2d8-4fe8-9c8c-b0be12475c4c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMAGE_DIR" class="java.lang.String"/>
+	<parameter name="DATE_FROM" class="java.util.Date"/>
+	<parameter name="DATE_TO" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[select distinct
+    event_dateFrom,
+    event_dateTo,
+    event_location,
+    event_title,
+    act_event_categories.event_category_id,
+    act_event_categories.event_category_name
+from
+    act_events,
+    act_event_categories
+where act_events.event_category_id = act_event_categories.event_category_id
+and   act_events.event_dateFrom >= $P{DATE_FROM}
+and   act_events.event_dateTo <= $P{DATE_TO}]]>
+	</queryString>
+	<field name="event_datefrom" class="java.sql.Timestamp"/>
+	<field name="event_dateto" class="java.sql.Timestamp"/>
+	<field name="event_location" class="java.lang.String"/>
+	<field name="event_title" class="java.lang.String"/>
+	<field name="event_category_id" class="java.lang.Integer"/>
+	<field name="event_category_name" class="java.lang.String"/>
+	<variable name="BACKGROUND" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<group name="proposal_id">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="3"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="66958381-28c7-4cca-b76a-2450612cf2ee" x="648" y="2" width="154" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Υπηρεσία ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3b6fbd2b-705a-4ba0-ad9e-7144c4aaecb1" x="64" y="17" width="345" height="20" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="false" isItalic="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Κέντρο Διαχείρισης Δικτύου]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="66958381-28c7-4cca-b76a-2450612cf2ee" x="646" y="23" width="154" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ενημέρωσης για Δράσεις]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3b6fbd2b-705a-4ba0-ad9e-7144c4aaecb1" x="65" y="3" width="581" height="20" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Τ.Ε.Ι ΑΘΗΝΑΣ]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement uuid="dc04beec-8052-4e92-80ff-3baf7022b773" x="2" y="2" width="63" height="46"/>
+				<imageExpression><![CDATA[$P{IMAGE_DIR} + "/logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="93" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="35cd678e-0722-4d2f-8eb8-c064a1000bf4" x="253" y="1" width="300" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[ΔΡΑΣΕΙΣ ΑΝΑ ΗΜΕΡΟΛΟΓΙΑΚΟ ΔΙΑΣΤΗΜΑ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="385dcc97-fa4f-48de-8627-9ffbaa795582" x="393" y="73" width="88" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Έναρξη]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6b0aa6b6-f11b-4622-bd51-c3a104690e8d" x="578" y="73" width="98" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Κατηγορία]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b45c8e6e-ef20-47b8-951b-71f46c18f4bd" x="676" y="73" width="95" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Περιοχή]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="93aa1633-09cc-4276-9c11-bdaa6e3563de" x="481" y="73" width="97" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Λήξη]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="60e052f1-725b-4e65-9532-cc601e7ad697" x="41" y="73" width="352" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Τίτλος]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a5ad68e4-25bd-4df2-9930-b8b576d58457" mode="Opaque" x="0" y="28" width="41" height="15" backcolor="#F8F8F8"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Από:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cdeea5c7-0c0a-44bb-9628-55f089de34c8" x="41" y="28" width="693" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{DATE_FROM})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a5ad68e4-25bd-4df2-9930-b8b576d58457" mode="Opaque" x="0" y="43" width="41" height="15" backcolor="#F8F8F8"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Εως:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cdeea5c7-0c0a-44bb-9628-55f089de34c8" x="41" y="43" width="693" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{DATE_TO})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch">
+			<line>
+				<reportElement uuid="fb2ad3e9-a051-45f5-a75b-9756feaf9ab4" x="2" y="-2" width="800" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement uuid="48595a6e-35cd-45c8-8c27-03e2e7ef5ada" mode="Opaque" x="0" y="2" width="614" height="15" backcolor="#F8F8F8"/>
+			</frame>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="4a447e04-3751-4cfb-9b24-e5ff39cc40d7" stretchType="RelativeToTallestObject" x="393" y="2" width="88" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{event_datefrom})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="554530b8-938e-4769-a51e-572a79072bfa" stretchType="RelativeToTallestObject" x="578" y="2" width="98" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{event_category_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="true">
+				<reportElement uuid="aff186ab-3bdf-4d25-93d1-c0da1ce0eb57" stretchType="RelativeToTallestObject" x="676" y="2" width="95" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{event_location}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="cdeea5c7-0c0a-44bb-9628-55f089de34c8" stretchType="RelativeToTallestObject" x="481" y="2" width="97" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{event_dateto})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="bb025117-3366-464c-a410-6bec00425e61" stretchType="RelativeToTallestObject" x="41" y="2" width="352" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{event_title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement uuid="6e7727e2-4899-4bba-9a4e-2f3cacb4c338" x="769" y="4" width="31" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="804d3275-3af1-4b27-9044-08d893660096" x="598" y="4" width="168" height="15"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" από"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

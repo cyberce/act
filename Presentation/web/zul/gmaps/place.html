@@ -1,0 +1,131 @@
+<script type="text/Javascript">
+    <![CDATA[
+    var map;
+    var actionMode;
+    var mOptions;
+    var markOptions = {
+        draggable: true
+    };
+    var drawingManager;
+    var markerPoint;
+    var markerData;
+
+    // load the google api loader
+    if (typeof(google) == 'undefined' || !google.load) {
+        jq.getScript('//www.google.com/jsapi', function () {
+            loadMaps();
+        });
+    }
+    else {
+        // otherwise just load maps
+        loadMaps();
+    }
+
+    // load the google maps api
+    function loadMaps() {
+        google.load("maps", "3", {
+            callback: initialize,
+            language: 'el',
+            other_params: 'sensor=false&libraries=drawing'
+        });
+    }
+
+    function initialize() {
+        google.maps.visualRefresh = true;
+
+        mOptions = {
+            center: new google.maps.LatLng(38.035348, 23.708834),
+            zoom: 17,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false,
+            streetViewControl: false
+        };
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mOptions);
+        google.maps.event.trigger(map, 'resize');
+
+        drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: null,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [
+                    google.maps.drawing.OverlayType.MARKER
+                ]
+            },
+            markerOptions: markOptions
+        });
+        drawingManager.setMap(map);
+
+        google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
+            markerPoint = marker;
+
+            drawingManager.setOptions({
+                drawingMode: null,
+                drawingControl: false
+            });
+        });
+
+        var coords;
+        switch (actionMode) {
+            case 'create':
+                break;
+            case 'edit':
+                coords = markerData.split("|");
+                markerPoint = addPreviewMarker(new google.maps.LatLng(coords[0], coords[1]), map, true);
+                map.setCenter(markerPoint.getPosition());
+                drawingManager.setOptions({
+                    drawingMode: null,
+                    drawingControl: false
+                });
+                break;
+            case 'view':
+                coords = markerData.split("|");
+                markerPoint = addPreviewMarker(new google.maps.LatLng(coords[0], coords[1]), map, false);
+                map.setCenter(markerPoint.getPosition());
+                drawingManager.setOptions({
+                    drawingMode: null,
+                    drawingControl: false
+                });
+                break;
+        }
+    }
+
+    function addPreviewMarker(pos, map, drag) {
+        var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            draggable: drag
+        });
+
+        return marker;
+    }
+
+    function doAccept() {
+        if (markerPoint != null) {
+            var val = markerPoint.getPosition().toString();
+            populateZKTextbox('coordsHolder', val);
+        } else {
+            populateZKTextbox('coordsHolder', null);
+        }
+
+        var w = zk.Widget.$('$coordsHolder');
+        zAu.send(new zk.Event(w, 'onChanging', null, {toServer: true}));
+    }
+
+    function doCreate() {
+        actionMode = 'create';
+    }
+
+    function doEdit() {
+        markerData = zk.Widget.$('$markerData').getValue();
+        actionMode = 'edit';
+    }
+
+    function doView() {
+        markerData = zk.Widget.$('$markerData').getValue();
+        actionMode = 'view';
+    }
+
+    ]]>
+</script>

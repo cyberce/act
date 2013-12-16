@@ -1,0 +1,148 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.ListActionHistoryVM')">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<div sclass="detail">
+		<div align="left" width="99%">
+			<hbox width="100%" widths="5%, 95%">
+
+				<label sclass="headerText" value="${labels.action_status_over}" />
+			</hbox>
+			<separator height="10px" />
+			<groupbox id="gb3" mold="3d" width="100%" open="false">
+				<attribute name="onOpen">
+					<![CDATA[
+                      import org.zkoss.util.resource.Labels;
+
+                      searchHeader.value = self.isOpen()? Labels.getLabel("search.title_hide") : Labels.getLabel("search.title_show");
+                      searchCaption.label = self.isOpen()? Labels.getLabel("search.criteria") : Labels.getLabel("search.click_here");
+                  ]]>
+				</attribute>
+				<caption id="searchCaption" label="${labels.search.click_here}"></caption>
+				<separator height="10px" />
+				<hbox width="100%" widths="30%,30%,40%">
+
+					<div>
+						<label sclass="labelNSGrayNormal" value="${labels.common.date}" />
+						<separator height="5px" />
+						<div>
+							<label sclass="labelNSGrayNormal" value="${labels.route.dateFrom}:" />
+							<datebox id="dateFromBox" constraint="no future: Λανθασμένη τιμή" cols="12" format="short " mold="rounded"
+							         value="@bind(vm.eventInterestSearchCriteria.dateFrom)" />
+						</div>
+						<separator height="5px" />
+						<div>
+							<label sclass="labelNSGrayNormal" value="${labels.route.dateTo}:" />
+							<datebox id="dateToBox" constraint="no future: Λανθασμένη τιμή" cols="12" format="short " mold="rounded"
+							         value="@bind(vm.eventInterestSearchCriteria.dateTo)" />
+						</div>
+						<separator height="20px" />
+						<hbox>
+							<label value="${labels.common.paging}:" />
+							<intbox value="@bind(vm.paging.pageSize)" />
+						</hbox>
+					</div>
+					<div>
+						<label sclass="labelNSGrayNormal" value="${labels.action.theme}" />
+						<separator height="3px" />
+						<div>
+							<tree id="tree" width="90%" checkmark="true" selectedItems="@bind(vm.selectedItems)">
+							</tree>
+						</div>
+					</div>
+					<div>
+						<label sclass="labelNSGrayNormal" value="${labels.listing.keyword}" />
+						<separator height="3px" />
+						<textbox width="95%" tabindex="1" value="@bind(vm.eventInterestSearchCriteria.eventKeyword)" />
+						<separator height="20px" />
+						<label sclass="labelNSGrayNormal" value="${labels.action.code}:" />
+						<separator height="3px" />
+						<textbox width="95%" tabindex="1" value="@bind(vm.eventInterestSearchCriteria.eventCode)" />
+					</div>
+				</hbox>
+				<separator height="10px" />
+				<hbox width="100%" widths="40%,50%,10%">
+					<div></div>
+					<div>
+						<toolbarbutton image="/img/search.png"
+						               onClick="@command('onSearch')" />
+						<space width="20px" />
+						<toolbarbutton image="/img/reset.png"
+						               onClick="@command('onResetSearch')" />
+					</div>
+					<div></div>
+				</hbox>
+			</groupbox>
+			<separator height="20px" />
+			<div align="right">
+				<hbox>
+					<toolbarbutton id="viewButton" image="/img/view.png" onClick="@command('onView')"
+					               disabled="@load(empty vm.selectedEventInterest)" />
+					<toolbarbutton id="rateButton" image="/img/rate.png" onClick="@command('onRate')"
+					               disabled="@load(empty vm.selectedEventInterest)" />
+					<toolbarbutton image="/img/print.png"
+					               onClick="@command('onPrintPDF')" />
+				</hbox>
+			</div>
+			<listbox model="@load(vm.eventInterestsList)" paginal="@{paging}"
+			         selectedItem="@bind(vm.selectedEventInterest)"
+			         id="eventInterestsListbox" width="100%" context="contextPopup">
+				<listhead>
+					<listheader id="eventTitle" label="${labels.action.title}" width="40%" sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="eventCategory" label="${labels.action.theme}" width="30%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="dateFrom" label="${labels.action.dateFrom}" width="20%"
+					            sortAscending="${comparator}" sortDescending="${comparator}"
+					            onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="dateTo" label="${labels.action.dateTo}" width="20%"
+					            sortAscending="${comparator}" sortDescending="${comparator}"
+					            onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="eventLocation" label="${labels.action.place}" width="25%"
+					            sortAscending="${comparator}" sortDescending="${comparator}"
+					            onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.event.eventTitle)"
+						          style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.event.eventCategory.name)"
+						          style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.event.dateFrom) @converter('formatedDate', format='dd/MM/yyyy')"
+						          style="text-align: center;" />
+						<listcell label="@load(item.event.dateTo) @converter('formatedDate', format='dd/MM/yyyy')"
+						          style="text-align: center;" />
+						<listcell label="@load(item.event.eventLocation)"
+						          style="text-align: center;white-space: normal;" />
+					</listitem>
+				</template>
+			</listbox>
+			<label id="empty" value="${labels.action.noActions}" visible="false"></label>
+			<paging id="paging" mold="os" detailed="true" onPaging="@command('onPaging')" />
+		</div>
+	</div>
+</window>

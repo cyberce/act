@@ -1,0 +1,642 @@
+<script type="text/Javascript">
+<![CDATA[
+var map;
+var mOptions;
+var pOptions = {
+    strokeColor: '#833083',
+    strokeWeight: 2,
+    strokeOpacity: 0.7,
+    editable: true
+};
+var icons;
+var cursors;
+var sources = {
+    path: 'path',
+    stop: 'stop'
+};
+var deleteMode = false;
+var previewMode = false;
+var drawingManager;
+var infoWindow;
+var stopsArray = [];
+var polylineArray = [];
+var previewMarkersArray = [];
+var rpath;
+var spath;
+var designMode;
+var routePath = [];
+
+// load the google api loader
+if (typeof(google) == 'undefined' || !google.load) {
+    jq.getScript('//www.google.com/jsapi', function () {
+        loadMaps();
+    });
+}
+else {
+    // otherwise just load maps
+    loadMaps();
+}
+
+// load the google maps api
+function loadMaps() {
+    google.load("maps", "3", {
+        callback: initialize,
+        language: 'el',
+        other_params: 'sensor=false&libraries=drawing'
+    });
+}
+
+function initialize() {
+    var i;
+
+    google.maps.visualRefresh = true;
+
+    icons = {
+        start: new google.maps.MarkerImage(
+                '../../img/designer/award.png'
+        ),
+        end: new google.maps.MarkerImage(
+                '../../img/designer/award.png'
+        ),
+        stop: new google.maps.MarkerImage(
+                '../../img/designer/star.png'
+        ),
+        stop_preview: new google.maps.MarkerImage(
+                '../../img/designer/star_preview.png'
+        )
+    };
+
+    cursors = {
+        eraser: 'url(../../img/designer/eraser.png), auto',
+        eraser_active: 'url(../../img/designer/eraser_act.png), auto',
+        draggable_eraser: 'url(../../img/designer/eraser.png), auto'
+    };
+
+    mOptions = {
+        center: new google.maps.LatLng(38.035348, 23.708834),
+        zoom: 17,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    infoWindow = new google.maps.InfoWindow({
+        content: ''
+    });
+
+    map = new google.maps.Map(document.getElementById("map-canvas"), mOptions);
+
+    if (designMode == '1') {
+        var finishControlDiv = document.createElement('div');
+        var finishControl = new FinishControl(finishControlDiv, map);
+        finishControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(finishControlDiv);
+
+        var drawControlDiv = document.createElement('div');
+        var drawControl = new DrawControl(drawControlDiv, map);
+        drawControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(drawControlDiv);
+
+        var stopControlDiv = document.createElement('div');
+        var stopControl = new StopControl(stopControlDiv, map);
+        stopControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(stopControlDiv);
+
+        var editControlDiv = document.createElement('div');
+        var editControl = new EditControl(editControlDiv, map);
+        editControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(editControlDiv);
+
+        var deleteControlDiv = document.createElement('div');
+        var deleteControl = new DeleteControl(deleteControlDiv, map);
+        deleteControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(deleteControlDiv);
+
+        var searchControlDiv = document.createElement('div');
+        var searchControl = new SearchControl(searchControlDiv, map);
+        searchControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchControlDiv);
+    }
+
+    drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: null,
+        drawingControl: false,
+        drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: [
+                google.maps.drawing.OverlayType.MARKER,
+                google.maps.drawing.OverlayType.POLYLINE
+            ]
+        },
+        markerOptions: {
+            editable: true
+        },
+        polylineOptions: pOptions
+    });
+    drawingManager.setMap(map);
+
+    google.maps.event.addListener(drawingManager, 'polylinecomplete', function (polyline) {
+        var targetPolyline = polyline;
+
+        polylineArray.push(targetPolyline);
+
+        if (polylineArray.length > 1) {
+            var newPolylineCoords = [];
+
+            for (i = 0; i < polylineArray.length; i++) {
+                newPolylineCoords = newPolylineCoords.concat(polylineArray[i].getPath().getArray());
+                polylineArray[i].setMap(null);
+            }
+
+            polylineArray.length = 0;
+
+            var targetPolyline = new google.maps.Polyline({
+                path: newPolylineCoords,
+                strokeWeight: pOptions.strokeWeight,
+                strokeOpacity: pOptions.strokeOpacity,
+                editable: true
+            });
+
+            targetPolyline.setMap(map);
+
+            polylineArray.push(targetPolyline);
+        }
+
+        google.maps.event.addListener(targetPolyline, "click", (function (v_polyline) {
+            return function () {
+                if (deleteMode) {
+                    v_polyline.setMap(null);
+                    polylineArray.splice(0, 1);
+                    v_polyline = null;
+                }
+            };
+        })(targetPolyline));
+
+    });
+
+    google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
+        stopsArray.push(marker);
+
+        marker.setOptions({
+            icon: icons.stop,
+            draggable: true,
+            sIndex: stopsArray.length
+        });
+
+        google.maps.event.addListener(marker, "click", (function (v_marker) {
+            return function () {
+                if (deleteMode) {
+                    v_marker.setMap(null);
+                    stopsArray.splice(v_marker.sIndex - 1, 1);
+                    v_marker = null;
+
+                    // Update marker indexes and icons
+                    for (i = 0; i < stopsArray.length; i++) {
+                        stopsArray[i].sIndex = i + 1;
+                        stopsArray[i].setOptions({
+                            cursor: cursors.eraser,
+                            icon: icons.stop
+                        });
+                    }
+                }
+            };
+        })(marker));
+
+    });
+
+    if (rpath != '-1' || spath != '-1') {
+        if (rpath != null) {
+            var path = rpath.split("|");
+
+            for (i = 1; i < path.length; i = i + 2) {
+                routePath.push(new google.maps.LatLng(path[i - 1], path[i]));
+            }
+
+            polyline = new google.maps.Polyline(pOptions);
+            polyline.setPath(routePath);
+            polyline.setMap(map);
+
+            google.maps.event.trigger(drawingManager, 'polylinecomplete', polyline);
+
+            var bounds = new google.maps.LatLngBounds(routePath[0], routePath[routePath.length - 1]);
+            map.fitBounds(bounds);
+
+        }
+
+        if (spath != null) {
+            var stops = spath.split("|");
+
+
+            var marker;
+            for (i = 1; i < stops.length; i = i + 2) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(stops[i - 1], stops[i])
+                });
+                google.maps.event.trigger(drawingManager, 'markercomplete', marker);
+            }
+        }
+
+        doPreview();
+    }
+
+}
+
+function toggleButtonImages(control, index) {
+    var imageName;
+    switch (index) {
+        case 1:
+        {
+            imageName = 'finish_act.png';
+            break;
+        }
+        case 2:
+        {
+            imageName = 'brush_act.png';
+            break;
+        }
+        case 3:
+        {
+            imageName = 'stop_act.png';
+            break;
+        }
+        case 4:
+        {
+            imageName = 'edit_act.png';
+            break;
+        }
+        case 5:
+        {
+            imageName = 'delete_act.png';
+            break;
+        }
+    }
+
+    jq('#finish_control').html('<img src="../../img/designer/finish.png"/>');
+    jq('#draw_control').html('<img src="../../img/designer/brush.png"/>');
+    jq('#stop_control').html('<img src="../../img/designer/stop.png"/>');
+    jq('#edit_control').html('<img src="../../img/designer/edit.png"/>');
+    jq('#delete_control').html('<img src="../../img/designer/delete.png"/>');
+
+    control.innerHTML = '<img src="../../img/designer/' + imageName + '"/>';
+}
+
+function SearchControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.id = 'search_control';
+    controlUI.className = 'toolbar_button';
+    controlUI.innerHTML = '<textbox style="width: 100px"/><img src="../../img/designer/search.png"/>';
+    controlUI.title = 'Αναζητήστε διεύθυνση στο χάρτη';
+    controlDiv.appendChild(controlUI);
+
+    google.maps.event.addDomListener(controlUI, 'click', function () {
+        var x;
+        var address = prompt("Παρακαλώ εισάγετε την διεύθυνση", "");
+        if (address != null) {
+            var geocoder = new google.maps.Geocoder();
+
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        map.setCenter(results[0].geometry.location);
+                        map.setZoom(17);
+                    }
+                } else {
+                    alert("Αποτυχία αναζήτησης της διεύθυνσης");
+                }
+            });
+        }
+    });
+}
+
+function FinishControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.className = 'toolbar_button';
+    controlUI.id = 'finish_control';
+    controlUI.innerHTML = '<img src="../../img/designer/finish.png"/>';
+    controlUI.title = 'Ολοκλήρωση σχεδίασης';
+    controlDiv.appendChild(controlUI);
+
+    google.maps.event.addDomListener(controlUI, 'click', function () {
+        if (!previewMode) {
+            toggleButtonImages(controlUI, 1);
+            undoDelete();
+            doPreview();
+        }
+    });
+}
+
+function DrawControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.id = 'draw_control';
+    controlUI.className = 'toolbar_button';
+    controlUI.innerHTML = '<img src="../../img/designer/brush.png"/>';
+    controlUI.title = 'Σχεδίαση διαδρομής';
+    controlDiv.appendChild(controlUI);
+
+    google.maps.event.addDomListener(controlUI, 'click', function () {
+        toggleButtonImages(controlUI, 2);
+        map.setOptions({
+            draggableCursor: null
+        });
+
+        if (previewMode) {
+            applyEditMode();
+        }
+        undoDelete();
+        drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYLINE);
+    });
+}
+
+function StopControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.id = 'stop_control'
+    controlUI.className = 'toolbar_button';
+    controlUI.innerHTML = '<img src="../../img/designer/stop.png"/>';
+    controlUI.title = 'Αποτύπωση ενδιάμεσου σημείου';
+    controlDiv.appendChild(controlUI);
+
+    google.maps.event.addDomListener(controlUI, 'click', function () {
+        toggleButtonImages(controlUI, 3);
+        map.setOptions({
+            draggableCursor: null
+        });
+        if (previewMode) {
+            applyEditMode();
+        }
+        undoDelete();
+        drawingManager.setDrawingMode(google.maps.drawing.OverlayType.MARKER);
+    });
+}
+
+function EditControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.id = 'edit_control';
+    controlUI.className = 'toolbar_button';
+    controlUI.innerHTML = '<img src="../../img/designer/edit.png"/>';
+    controlUI.title = 'Τροποποίηση διαδρομής';
+    controlDiv.appendChild(controlUI);
+
+    google.maps.event.addDomListener(controlUI, 'click', function () {
+        toggleButtonImages(controlUI, 4);
+        map.setOptions({
+            draggableCursor: null
+        });
+
+        applyEditMode();
+
+        deleteMode = false;
+
+        undoDelete();
+    });
+
+}
+
+function DeleteControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    var controlUI = document.createElement('div');
+    controlUI.id = 'delete_control';
+    controlUI.className = 'toolbar_button';
+    controlUI.innerHTML = '<img src="../../img/designer/delete.png"/>';
+    controlUI.title = 'Διαγραφή διαδρομής ή ενδιάμεσων σημείων';
+    controlDiv.appendChild(controlUI);
+
+    google.maps.event.addDomListener(controlUI, 'click', function () {
+        toggleButtonImages(controlUI, 5);
+        var i;
+        drawingManager.setDrawingMode(null);
+        map.setOptions({
+            draggableCursor: cursors.draggable_eraser
+        });
+
+        if (previewMode) {
+            applyEditMode();
+        }
+
+        deleteMode = true;
+        for (i = 0; i < polylineArray.length; i++) {
+            google.maps.event.addListener(polylineArray[i], 'mouseover', function () {
+                this.setOptions({
+                    strokeColor: "red",
+                    cursor: cursors.eraser_active
+                });
+            });
+            google.maps.event.addListener(polylineArray[i], 'mouseout', function () {
+                this.setOptions({
+                    strokeColor: pOptions.strokeColor,
+                    cursor: cursors.eraser_active
+                });
+            });
+        }
+        for (i = 0; i < stopsArray.length; i++) {
+            google.maps.event.addListener(stopsArray[i], 'mouseover', function () {
+                this.setCursor(cursors.eraser_active);
+            });
+            google.maps.event.addListener(stopsArray[i], 'mouseout', function () {
+                this.setCursor(cursors.eraser);
+            });
+        }
+    });
+}
+
+function doPreview() {
+    drawingManager.setDrawingMode(null);
+
+    map.setOptions({
+        draggableCursor: null
+    });
+
+    previewMode = true;
+
+    if (polylineArray.length > 0) {
+        polylineArray[0].setOptions({
+            strokeColor: "#cf0627",
+            editable: false
+        });
+
+        var coords = polylineArray[0].getPath().getArray();
+
+        applyPreviewPathMarker(coords, 0, sources.path);
+        applyPreviewPathMarker(coords, coords.length - 1, sources.path);
+
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'latLng': coords[0]}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    populateZKTextbox('startingPoint', results[0].formatted_address);
+                }
+            } else {
+                alert("Geocoder failed due to: " + status);
+            }
+        });
+
+        geocoder.geocode({'latLng': coords[coords.length - 1]}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    populateZKTextbox('destinationPoint', results[0].formatted_address);
+                }
+            } else {
+                alert("Geocoder failed due to: " + status);
+            }
+        });
+
+
+    } else {
+        populateZKTextbox('startingPoint', null);
+        populateZKTextbox('destinationPoint', null);
+    }
+
+    var i;
+    for (i = 0; i < stopsArray.length; i++) {
+        applyPreviewPathMarker(stopsArray, i, sources.stop);
+    }
+}
+
+function applyPreviewPathMarker(markerArray, i, source) {
+    var marker;
+
+    if (source === sources.path) {
+        marker = new google.maps.Marker({
+            position: markerArray[i],
+            map: map
+        });
+
+        if (i == 0) {
+            marker.setIcon(icons.start);
+        } else {
+            marker.setIcon(icons.end);
+        }
+
+    } else {
+        marker = new google.maps.Marker({
+            position: markerArray[i].getPosition(),
+            map: map
+        });
+        marker.setIcon(icons.stop_preview);
+    }
+
+    google.maps.event.addListener(marker, 'click', (function (v_marker, v_i, v_source) {
+        return function () {
+            var geocoder = new google.maps.Geocoder();
+
+            geocoder.geocode({'latLng': this.getPosition()}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        var label;
+                        if (v_source === sources.path) {
+                            if (v_i == 0) {
+                                label = 'Αφετηρία';
+                            } else if (v_i == markerArray.length - 1) {
+                                label = 'Προορισμός';
+                            }
+                        } else {
+                            label = 'Στάση ' + (v_i + 1) + 'η';
+                        }
+
+                        infoWindow.setContent("<div style='width: 200px;'><div class='infoHeader'>" + label + '</div><div>' + results[0].formatted_address + "</div></div>");
+                        infoWindow.open(map, v_marker);
+                    }
+                } else {
+                    alert("Geocoder failed due to: " + status);
+                }
+            });
+        };
+    })(marker, i, source));
+
+    previewMarkersArray.push(marker);
+
+    if (source === sources.stop) {
+        markerArray[i].setMap(null);
+    }
+}
+
+function doAccept() {
+    var val = '';
+    var i;
+    var pathArray = [];
+
+    undoDelete();
+    doPreview();
+    for (i = 0; i < polylineArray.length; i++) {
+        pathArray = polylineArray[i].getPath().getArray();
+        val = pathArray.toString();
+    }
+    val += '|';
+    for (i = 0; i < stopsArray.length; i++) {
+        val += stopsArray[i].getPosition() + '|';
+    }
+
+    populateZKTextbox('coordsHolder', val);
+
+    zAu.send(new zk.Event(zk.Widget.$('$coordsHolder'), 'onChanging'));
+}
+
+function clearPreviewMarkers() {
+    var i;
+    for (i = 0; i < previewMarkersArray.length; i++) {
+        previewMarkersArray[i].setMap(null);
+    }
+    previewMarkersArray.length = 0;
+}
+
+function applyEditMode() {
+    previewMode = false;
+
+    clearPreviewMarkers();
+
+    if (polylineArray.length > 0) {
+        var polyline = polylineArray[polylineArray.length - 1];
+        polyline.setOptions({
+            strokeColor: pOptions.strokeColor,
+            editable: true
+        });
+    }
+
+    for (i = 0; i < stopsArray.length; i++) {
+        stopsArray[i].setMap(map);
+    }
+}
+
+function undoDelete() {
+    var i;
+    deleteMode = false;
+    map.setOptions({
+        draggableCursor: null
+    });
+    for (i = 0; i < polylineArray.length; i++) {
+        google.maps.event.clearListeners(polylineArray[i], 'mouseover');
+        google.maps.event.clearListeners(polylineArray[i], 'mouseout');
+        polylineArray[i].setOptions({
+            strokeColor: pOptions.strokeColor,
+            cursor: null
+        });
+    }
+    for (i = 0; i < stopsArray.length; i++) {
+        google.maps.event.clearListeners(stopsArray[i], 'mouseover');
+        google.maps.event.clearListeners(stopsArray[i], 'mouseout');
+        stopsArray[i].setCursor(null);
+    }
+}
+
+function populateZKTextbox(zkid, value) {
+    var txtBox = zk.Widget.$('$' + zkid);
+    txtBox.setValue(value);
+    txtBox.smartUpdate('value', value);
+}
+
+function doLoad() {
+    rpath = zk.Widget.$('$routePath').getValue();
+    spath = zk.Widget.$('$stopPoints').getValue();
+    designMode = zk.Widget.$('$designMode').getValue();
+}
+
+]]>
+</script>

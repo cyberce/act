@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+	<distributable />
+
+	<!--Log4j-->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/properties/log4j.properties</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jExposeWebAppRoot</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<!--Spring Framework-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/config.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+	</listener>
+
+	<!--ZK Framework-->
+	<listener>
+		<display-name>ZK listener for session cleanup</display-name>
+		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
+	</listener>
+	<servlet>
+		<display-name>ZK loader for ZUML pages</display-name>
+		<servlet-name>zkLoader</servlet-name>
+		<servlet-class>org.zkoss.zk.ui.http.DHtmlLayoutServlet</servlet-class>
+
+		<init-param>
+			<param-name>update-uri</param-name>
+			<param-value>/zkau</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zul</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zhtml</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<display-name>The asynchronous update engine for ZK</display-name>
+		<servlet-name>auEngine</servlet-name>
+		<servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>auEngine</servlet-name>
+		<url-pattern>/zkau/*</url-pattern>
+	</servlet-mapping>
+
+	<!--Web XML -->
+	<mime-mapping>
+		<extension>zhtml</extension>
+		<mime-type>text/html</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>zul</extension>
+		<mime-type>text/html</mime-type>
+	</mime-mapping>
+
+	<!-- Preview Event Servlet -->
+	<servlet>
+		<servlet-name>PreviewEventServlet</servlet-name>
+		<servlet-class>org.teiath.web.servlet.PreviewEvent</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PreviewEventServlet</servlet-name>
+		<url-pattern>/previewEvent</url-pattern>
+	</servlet-mapping>
+
+	<!-- Facebook Filters -->
+	<filter>
+		<filter-name>FBOAuthEvents</filter-name>
+		<filter-class>org.teiath.web.facebook.act.FBOAuthEvents</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>FBOAuthEvents</filter-name>
+		<url-pattern>/fbauthevents</url-pattern>
+	</filter-mapping>
+
+	<!-- Reports Servlet -->
+	<servlet>
+		<servlet-name>ReportsServlet</servlet-name>
+		<servlet-class>org.teiath.web.reports.ReportsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReportsServlet</servlet-name>
+		<url-pattern>/reportsServlet</url-pattern>
+	</servlet-mapping>
+
+	<!--
+		Define the Spring Dispatcher Servlet for the REST services.
+		The 'contextConfiguration' param with an empty value means that the
+		Spring Context won't try to load a default file called restservices-servlet.xml
+	 -->
+	<servlet>
+		<servlet-name>restservices</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!--
+		This Servlet mapping means that this Servlet will handle all incoming requests
+	 -->
+	<servlet-mapping>
+		<servlet-name>restservices</servlet-name>
+		<url-pattern>/services/events</url-pattern>
+		<url-pattern>/services/events.rss</url-pattern>
+		<url-pattern>/services/event</url-pattern>
+		<url-pattern>/services/notifications.rss</url-pattern>
+		<url-pattern>/services/categories</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.zul</welcome-file>
+		<welcome-file>index.zhtml</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+	</welcome-file-list>
+</web-app>

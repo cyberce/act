@@ -1,0 +1,34 @@
+<?page viewport="width=device-width, initial-scale=0, user-scalable=yes"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page title="${labels.template.title}"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<separator height="15px" />
+			<label sclass="headerText" value="Παρουσίαση Υπηρεσίας" />
+			<separator height="50px"/>
+			<div align="center" width="95%">
+				<iframe id="iframe" src="/presentation.pdf"
+				        width="1170px" height="800px" style="border: 1px solid gray" />
+				<separator height="15px" />
+			</div>
+		</div>
+	</div>
+</window>

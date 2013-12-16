@@ -1,0 +1,94 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.ntf.ViewNotificationCriteriaVM')">
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px dotted #434E9E;
+		border-top: 1px dotted #434E9E;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="50%, 50%">
+				<label sclass="headerText" value="${labels.notifications.criteria.view}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/back.png" onClick="@command('onBack')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<grid style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold" value="${labels.notifications.criteria.type}:" />
+						<label value="@load(vm.notificationCriteria.typeString)" sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.notifications.criteria.title}:" />
+						<label value="@load(vm.notificationCriteria.title)" sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.notifications.criteria.description}:" />
+						<label value="@load(vm.notificationCriteria.description)" sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.action.theme}:" />
+						<label id="categoriesLabel" sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.action.startDate}:" />
+						<label value="@load(vm.notificationCriteria.dateFrom) @converter('formatedDate', format='dd/MM/yyyy')"
+						       sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.action.endDate}:" />
+						<label value="@load(vm.notificationCriteria.dateTo) @converter('formatedDate', format='dd/MM/yyyy')"
+						       sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold" value="${labels.action.amea}:" />
+						<label id="ameaLabel" sclass="labelNSBlackNormal" width="90%" />
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayBold"
+						       value="${labels.notifications.goods.keywords}:" />
+						<label value="@load(vm.notificationCriteria.keywords)" sclass="labelNSBlackNormal"
+						       width="90%" />
+					</row>
+				</rows>
+			</grid>
+		</div>
+	</div>
+
+</window>

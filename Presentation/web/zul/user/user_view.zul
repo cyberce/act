@@ -1,0 +1,133 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        id="userViewWin"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.user.ViewUserVM')">
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px dotted #434E9E;
+		border-top: 1px dotted #434E9E;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="50%, 50%">
+				<label sclass="headerText" value="${labels.user.profile}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/update.png" onClick="@command('onUpdate')" />
+				</div>
+			</hbox>
+			<separator height="40px" />
+			<hlayout>
+				<div sclass="photoPlaceholder">
+					<image id="userPhoto" height="256px" width="256px" />
+				</div>
+				<space width="10px" />
+				<div style="position: relative; float: right; vertical-align: top">
+					<label sclass="labelNSGrayBold16" value="${labels.user.personalData}" />
+					<separator height="10px" />
+					<grid style="border: 0; width: 800px">
+						<columns>
+							<column width="20%" />
+							<column width="80%" />
+						</columns>
+						<rows>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.lastname}:" />
+								<label value="@load(vm.user.lastName)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.firstname}:" />
+								<label value="@load(vm.user.firstName)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.birthDate}:" />
+								<label value="@load(vm.user.birthDate) @converter('formatedDate', format='dd/MM/yyyy')"
+								       sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.gender}:" />
+								<label id="genderLabel" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.type}:" />
+								<label id="typeLabel" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+						</rows>
+					</grid>
+					<separator height="20px" />
+					<label sclass="labelNSGrayBold16" value="Επικοινωνία" />
+					<separator height="10px" />
+					<grid style="border: 0">
+						<columns>
+							<column width="20%" />
+							<column width="80%" />
+						</columns>
+						<rows>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.address}:" />
+								<label value="@load(vm.user.homeAddress)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.email}:" />
+								<label value="@load(vm.user.email)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.telephone}:" />
+								<label value="@load(vm.user.phoneNumber)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.mobile}:" />
+								<label value="@load(vm.user.mobileNumber)" sclass="labelNSBlackNormal"
+								       width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.fax}:" />
+								<label value="@load(vm.user.faxNumber)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+						</rows>
+					</grid>
+					<separator height="20px" />
+					<label sclass="labelNSGrayBold16" value="Κοινωνικά δίκτυα" />
+					<separator height="10px" />
+					<grid style="border: 0">
+						<columns>
+							<column width="20%" />
+							<column width="80%" />
+						</columns>
+						<rows>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.facebook}:" />
+								<label value="@load(vm.user.facebookId)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.google}:" />
+								<label value="@load(vm.user.googleId)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+							<row sclass="viewRow">
+								<label width="100%" sclass="labelNSGrayBold" value="${labels.user.twitter}:" />
+								<label value="@load(vm.user.twitterId)" sclass="labelNSBlackNormal" width="90%" />
+							</row>
+						</rows>
+					</grid>
+
+				</div>
+			</hlayout>
+			<separator height="20px" />
+		</div>
+	</div>
+</window>

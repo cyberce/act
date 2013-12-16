@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="jts-1.13">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jts-1.13/xerces.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jts-1.13/jts-1.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jts-1.13/acme.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jts-1.13/jtsio-1.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jts-1.13/junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jts-1.13/JTS_Test.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

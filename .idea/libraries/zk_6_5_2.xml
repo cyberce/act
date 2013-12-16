@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="zk-6.5.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zhtml.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zcommon.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zul.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zk.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zweb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zel.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zkbind.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zkplus.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/ext/bsh.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/ext/commons-fileupload.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/ext/commons-io.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/theme/sapphire.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/theme/silvertail.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/zkforge/flashchart.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zk-6.5.2/bwcaptcha.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

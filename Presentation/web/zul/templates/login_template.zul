@@ -1,0 +1,91 @@
+<?page viewport="width=device-width, initial-scale=0, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        border="none" width="100%"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.templates.LoginTemplateVM')"
+        onClientInfo="@command('updateClientInfo', orientation=event.orientation)">
+
+	<div sclass="root" style="margin-top: 20px ;margin-bottom: 20px;">
+		<div sclass="header">
+			<div sclass="headerimg">
+				<div sclass="carimg">
+					<a href="http://www.teiath.gr/" sclass="link" target="_blank" ></a>
+				</div>
+			</div>
+
+		</div>
+		<div sclass="subheader-bar-container">
+			<div sclass="subheader">
+				<hbox>
+					<menubar sclass="menubar" id="menubar" style="margin-top: -5px;">
+						<menuitem image="/img/home.png"
+						          onClick="@command('home')" />
+					</menubar>
+				</hbox>
+			</div>
+		</div>
+		<separator height="20px" />
+		<vbox>
+			<hbox self="@insert(detail)" />
+		</vbox>
+		<separator height="20px" />
+		<div sclass="footer-bar-container">
+			<div sclass="footer-bar">
+				<hbox widths="50%, 50%" width="100%" style="padding-top: 5px">
+					<div style="padding-left: 10px;">
+						<label onClick="@command('terms')" onMouseOver='self.setSclass("footer-label-active")'
+						       onMouseOut='self.setSclass("footer-label")' value="Όροι Χρήσης" sclass="footer-label" />
+						<space width="5px" />
+						<label onClick="@command('presentation')" onMouseOver='self.setSclass("footer-label-active")'
+						       onMouseOut='self.setSclass("footer-label")' value="Παρουσίαση Υπηρεσίας" sclass="footer-label" />
+						<space width="5px" />
+						<!--<label onClick="@command('manual')" onMouseOver='self.setSclass("footer-label-active")'-->
+						       <!--onMouseOut='self.setSclass("footer-label")' value="Εγχειρίδιο χρήσης" sclass="footer-label" />-->
+						<h:a onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" style="color: #FFFFFF; font-size: 10px; font-weight: bold;" href="/zul/aux_material/html/userManual.htm">Εγχειρίδιο χρήσης</h:a>
+						<space width="5px" />
+						<label onClick="@command('api')" onMouseOver='self.setSclass("footer-label-active")'
+						       onMouseOut='self.setSclass("footer-label")' value="API" sclass="footer-label" />
+					</div>
+					<div style="text-align: right; padding-right: 10px">
+						<label value="Ακολουθήστε μας:" sclass="footer-label" />
+						<a href="https://www.facebook.com/pages/%CE%A5%CF%80%CE%B7%CF%81%CE%B5%CF%83%CE%AF%CE%B1-%CE%95%CE%BD%CE%B7%CE%BC%CE%AD%CF%81%CF%89%CF%83%CE%B7%CF%82-%CE%95%CE%BA%CF%80%CE%B1%CE%B9%CE%B4%CE%B5%CF%85%CF%84%CE%B9%CE%BA%CF%8E%CE%BD-%CE%BA%CE%B1%CE%B9-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CF%83%CE%BC%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CF%81%CE%AC%CF%83%CE%B5%CF%89%CE%BD/408991099202006"
+						   image="/img/fb.png" target="_blank" />
+						<a href="https://twitter.com/educult_teiath"
+						   image="/img/TwitterIcon.png" target="_blank" />
+						<a href="https://plus.google.com/b/116228950562157459530/116228950562157459530/"
+						   image="/img/google.png" target="_blank" />
+						<a href="https://educult.teiath.gr/services/events.rss"
+						   image="/img/rss.png" target="_blank" />
+					</div>
+				</hbox>
+			</div>
+		</div>
+		<div sclass="footer-container">
+			<hbox sclass="footer-container table td">
+				<space width="20px" />
+				<a href="http://europa.eu/"
+				   image="/img/europe.png" target="_blank" />
+				<a href="http://www.digitalplan.gov.gr/portal/"
+				   image="/img/ktp.png" target="_blank" />
+				<a href="http://www.espa.gr/el/Pages/Default.aspx"
+				   image="/img/espa.png" target="_blank" />
+				<vbox>
+					<div sclass="funds">
+						<label value="${labels.template.funds}" />
+					</div>
+					<div sclass="copyright">
+						<label value="${labels.template.copyrights}" />
+						<separator height="42px" />
+						<a href="${labels.template.webAddress}"
+						   image="/img/wcag2AA.png" target="_blank" />
+						<html><a rel="license" href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/2.0/88x31.png" /></a></html>
+					</div>
+				</vbox>
+				<a href="http://www.cyberce.gr" label="Powered by Cyberce S.A" />
+			</hbox>
+			<label value="${labels.template.version}"/>
+		</div>
+	</div>
+</window>

@@ -1,0 +1,32 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?page viewport="width=device-width, initial-scale=0, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        id="loginWin"
+        title="Σύνδεση"
+        border="normal"
+        width="200px"
+        height="160px"
+        mode="modal"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.LoginVM')">
+
+	<div align="center" width="100%">
+		<vbox align="center">
+			<label id="username" width="100%" sclass="labelNSBlueBold" value="${labels.user.username}" />
+			<textbox width="180px" tabindex="1" mold="rounded" value="@bind(vm.username)" />
+			<separator height="10px" />
+			<label id="password" width="100%" sclass="labelNSBlueBold" value="${labels.user.password}"
+			       onOK="@command('onLogin')" />
+			<textbox width="180px" type="password" tabindex="2" mold="rounded" value="@bind(vm.password)"
+			         onOK="@command('onLogin')" />
+			<div align="right">
+				<toolbarbutton label="${labels.user.access.$}" onClick="@command('onLogin')" autodisable="self" />
+				<toolbarbutton label="${labels.user.cancel}" onClick="@command('onCancel')" autodisable="self" />
+			</div>
+		</vbox>
+	</div>
+</window>

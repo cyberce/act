@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="javamail-1.4.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/mail.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/mailapi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/imap.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/dsn.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/pop3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/smtp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javamail-1.4.5/gimap.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

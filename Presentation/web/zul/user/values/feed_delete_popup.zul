@@ -1,0 +1,49 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        id="deleteFeedPopupWin"
+        title="Διαγραφή πηγής δράσεων"
+        border="normal"
+        width="300px"
+        mode="modal"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.user.DeleteFeedVM')">
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px solid #FFFFFF;
+		border-top: 1px solid #FFFFFF;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<separator height="20px" />
+			<label width="100%" sclass="labelNSGrayBold" value="Διαγραφή επιλεγμένης πηγής;" />
+			<grid oddRowSclass="non-odd" style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows>
+					<row spans="4" sclass="viewRow">
+						<checkbox label="Διαγραφή δράσεων πηγής" checked="@bind(vm.deleteFeedData)" />
+					</row>
+				</rows>
+			</grid>
+			<separator height="20px" />
+			<hbox width="100%" widths="@load(not empty fx.id? '50%, 50%': '50%, 50%')">
+				<div width="100%" style="text-align: right">
+					<button label="Ναι" onClick="@command('onConfirm')" />
+					<button label="Όχι" onClick="@command('onCancel')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+		</div>
+	</div>
+
+</window>

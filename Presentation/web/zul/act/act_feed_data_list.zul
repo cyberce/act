@@ -1,0 +1,195 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        id="feedDataWin"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.ListFeedDataVM')">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<style>
+		div.z-listbox {
+		border: 0;
+		}
+
+		.z-paging {
+		background-color: #ffffff;
+		}
+
+		div.z-listbox-pgi-b {
+		border: 0;
+		}
+	</style>
+
+	<div sclass="detail">
+		<div align="left" width="100%">
+			<hbox width="100%" widths="5%, 95%">
+				<label sclass="headerText" value="Αναζήτηση δράσεων από εξωτερικές πηγές" />
+			</hbox>
+			<separator height="10px" />
+			<groupbox form="@id('fx') @save(vm.feedDataSearchCriteria, before='onSearch')" id="gb3" mold="3d"
+			          width="100%"
+			          open="true">
+				<attribute name="onOpen">
+					<![CDATA[
+                      import org.zkoss.util.resource.Labels;
+
+                      searchHeader.value = self.isOpen()? Labels.getLabel("search.title_hide") : Labels.getLabel("search.title_show");
+                      searchCaption.label = self.isOpen()? Labels.getLabel("search.criteria") : Labels.getLabel("search.click_here");
+                  ]]>
+				</attribute>
+				<caption id="searchCaption" label="${labels.search.hide}"></caption>
+				<separator height="10px" />
+				<hbox width="100%" widths="30%,40%,30%">
+					<div>
+						<vbox>
+							<label sclass="labelNSGrayNormal" value="${labels.feed.singular}" />
+							<combobox readonly="true" model="@load(vm.feeds)"
+							          selectedItem="@bind(fx.feed)" tabindex="2" width="300px">
+								<template name="model" var="item">
+									<comboitem label="@load(item.title)" />
+								</template>
+							</combobox>
+							<separator height="20px" />
+							<label sclass="labelNSGrayNormal" value="Να εμφανίζονται:" />
+							<separator height="3px" />
+							<radiogroup width="100%" id="interestingRG"
+								           selectedItem="@bind(vm.feedDataSearchCriteria.interestingFlag) @converter('org.teiath.web.converter.RadiogroupIntegerConverter')">
+								<div>
+									<radio value="-1" label="Όλες" radiogroup="interestingRG"
+									       selected="true" />
+								</div>
+								<div>
+									<radio value="1" label="Όσες ενδιαφέρουν" radiogroup="interestingRG" />
+								</div>
+								<div>
+									<radio value="0" label="Όσες δεν ενδιαφέρουν" radiogroup="interestingRG" />
+								</div>
+							</radiogroup>
+						</vbox>
+					</div>
+					<div>
+						<vbox>
+							<label sclass="labelNSGrayNormal" value="${labels.feed.feedCategory}" />
+							<combobox readonly="true" model="@load(vm.feedCategories)"
+							          selectedItem="@bind(vm.feedDataSearchCriteria.feedCategory)" tabindex="2"
+							          width="300px">
+								<template name="model" var="item">
+									<comboitem label="@load(item.title)" />
+								</template>
+							</combobox>
+						</vbox>
+					</div>
+					<div>
+						<div>
+							<label sclass="labelNSGrayNormal" value="${labels.common.date}" />
+							<separator height="5px" />
+							<div>
+								<label sclass="labelNSGrayNormal" value="${labels.route.dateFrom}:" />
+								<separator height="5px" />
+								<datebox id="dateFromSearch"
+								         cols="12"
+								         format="short " mold="rounded"
+								         value="@bind(vm.feedDataSearchCriteria.dateFrom)" />
+							</div>
+							<div>
+								<label sclass="labelNSGrayNormal" value="${labels.route.dateTo}:" />
+								<separator height="5px" />
+								<datebox id="dateToSearch"
+								         cols="12" format="short " mold="rounded"
+								         value="@bind(vm.feedDataSearchCriteria.dateTo)" />
+							</div>
+						</div>
+					</div>
+
+				</hbox>
+				<separator height="10px" />
+				<hbox width="100%" widths="40%,50%,10%">
+					<div></div>
+					<div>
+						<toolbarbutton image="/img/search.png"
+						               onClick="@command('onSearch')" />
+						<space width="20px" />
+						<toolbarbutton image="/img/reset.png"
+						               onClick="@command('onResetSearch')" />
+					</div>
+					<div></div>
+				</hbox>
+			</groupbox>
+			<separator height="30px" />
+			<div align="right" id="toolbar" visible="false">
+				<hbox>
+					<toolbarbutton image="/img/repoClean.png" onClick="@command('onClean')"/>
+					<toolbarbutton id="viewButton" image="/img/view.png" onClick="@command('onView')"
+					               disabled="@load(empty vm.selectedFeedData)" />
+					<toolbarbutton id="createButton" image="/img/createFromFeed.png" onClick="@command('onCreate')"
+					               disabled="@load(empty vm.selectedFeedData)" />
+					<toolbarbutton image="/img/flagInteresting.png" onClick="@command('onFlagInteresting')"
+					               disabled="@load(empty vm.selectedList)" />
+					<toolbarbutton image="/img/notInteresting.png" onClick="@command('onFlagNotInteresting')"
+					               disabled="@load(empty vm.selectedList)" />
+				</hbox>
+			</div>
+		</div>
+		<div>
+			<listbox model="@load(vm.feedDataList)" paginal="@{paging}" selectedItem="@bind(vm.selectedFeedData)" selectedItems="@bind(vm.selectedList)"
+			         id="feedDataListbox" width="99%" context="contextPopup" visible="false">
+				<listhead style="border: 1px solid black">
+					<listheader width="6%" style="text-align: center; white-space: normal;"/>
+					<listheader id="publicationDate" label="${labels.feed.publicationDate}" width="10%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center; white-space: normal;" />
+					<listheader id="title" label="${labels.feed.title}" width="33%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center; white-space: normal;" />
+					<listheader id="feed" label="${labels.feed.singular}" width="13%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="feedCategory" label="${labels.feed.feedCategory}" width="19%"
+					            sortAscending="${comparator}"
+					            sortDescending="${comparator}" onSort="@command('onSort')"
+					            style="text-align: center; white-space: normal;" />
+					<listheader id="eventCode" label="${labels.action.code}" width="13%"
+					            style="text-align: center; white-space: normal;" />
+					<listheader width="6%" style="text-align: center; white-space: normal;"/>
+				</listhead>
+				<template name="model" var="item">
+					<listitem>
+						<listcell style="text-align: center; white-space: normal;"/>
+						<listcell label="@load(item.publicationDate) @converter('formatedDate', format='dd/MM/yyyy')"
+						          style="@load(item.interesting eq 2? 'text-align: center;white-space: normal;font-weight: bold': 'text-align: center;white-space: normal;')" />
+						<listcell label="@load(item.title)" style="@load(item.interesting eq 2? 'text-align: center;white-space: normal;font-weight: bold': 'text-align: center;white-space: normal;')" />
+						<listcell label="@load(item.feed.title)"
+						          style="@load(item.interesting eq 2? 'text-align: center;white-space: normal;font-weight: bold': 'text-align: center;white-space: normal;')" />
+						<listcell label="@load(item.feed.feedCategory.title)"
+						          style="@load(item.interesting eq 2? 'text-align: center;white-space: normal;font-weight: bold': 'text-align: center;white-space: normal;')" />
+						<listcell label="@load(item.eventCode)"
+						          style="@load(item.interesting eq 2? 'color:blue; CURSOR: pointer; TEXT-DECORATION: underline; text-align: center;white-space: normal;font-weight: bold': 'color:blue; CURSOR: pointer; TEXT-DECORATION: underline; text-align: center;white-space: normal;')"
+						          onClick="@command('onViewEvent')" />
+						<listcell style="text-align: center; white-space: normal;">
+							<image src="/img/star.png" if="${item.interesting == 1}" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<label id="empty" value="${labels.action.noActions}" visible="false"></label>
+			<paging id="paging" mold="os" width="99%" detailed="true" onPaging="@command('onPaging')" visible="false" />
+		</div>
+	</div>
+</window>

@@ -1,0 +1,296 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:w="client"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.ViewActionOperatorVM')">
+
+
+	<script>
+		function doLoad(ownerval, interval) {
+		$('.rateitowner').rateit({
+		step: 1,
+		starwidth: 16,
+		starheight: 16,
+		readonly: true,
+		value: ownerval
+		});
+
+		$('.rateitinter').rateit({
+		step: 1,
+		starwidth: 16,
+		starheight: 16,
+		readonly: true,
+		value: interval
+		});
+		}
+	</script>
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px dotted #434E9E;
+		border-top: 1px dotted #434E9E;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+
+	<style src="/css/maps.css" />
+
+	<script src="/zul/gmaps/js/utils.js"></script>
+
+	<include src="/js/print.html" mode="instant" />
+	<include src="/js/place.html" mode="instant" />
+
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="50%, 50%">
+				<label sclass="headerText" value="${labels.action.view}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/back.png" onClick="@command('onBack')" />
+					<toolbarbutton image="/img/print.png">
+						<attribute w:name="onClick">
+							zk.Widget.$(jq('$dynamicMapRow')[0]).setVisible(false);
+							zk.Widget.$(jq('$staticMapRow')[0]).setVisible(true);
+							print(this,'group',500,800,true);//
+							zk.Widget.$(jq('$dynamicMapRow')[0]).setVisible(true);
+							zk.Widget.$(jq('$staticMapRow')[0]).setVisible(false);
+						</attribute>
+					</toolbarbutton>
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<tabbox>
+				<tabs id="tabs">
+					<tab label="${labels.action.inputs}" />
+					<tab id="photoTab" label="${labels.action.interests}" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+
+						<hlayout width="100%">
+							<vbox>
+								<div>
+									<vbox id="photoVBox">
+
+									</vbox>
+								</div>
+								<separator height="10px" />
+								<div>
+									<hbox width="100%" widths="25%, 25%, 25%, 25%" id="imageLibrary" />
+								</div>
+							</vbox>
+							<space width="5px" />
+							<div id="group" style="padding-top: 5px">
+								<label multiline="true" value="@load(vm.event.eventTitle)" style="font-size: 20px" width="90%" />
+								<separator height="20px" />
+								<grid style="border: 0; width: 800px">
+									<columns>
+										<column width="20%" />
+										<column width="30%" />
+										<column width="30%" />
+										<column width="20%" />
+									</columns>
+									<rows>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.code}:" />
+											<label value="@load(vm.event.code)" sclass="labelNSBlackNormal"
+											       width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.title}:" />
+											<label value="@load(vm.event.eventTitle)" sclass="labelNSBlackNormal"
+											       width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.theme}:" />
+											<label value="@load(vm.event.eventCategory.name)"
+											       sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.description}:" />
+											<label value="@load(vm.event.eventDescription)" sclass="labelNSBlackNormal"
+											       width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.startDate}:" />
+											<label value="@load(vm.event.dateFrom) @converter('formatedDate', format='dd/MM/yyyy')"
+											       sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.endDate}:" />
+											<label value="@load(vm.event.dateTo) @converter('formatedDate', format='dd/MM/yyyy')"
+											       sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.startingTime}:" />
+											<label value="@load(vm.event.dateFrom) @converter('formatedDate', format='HH:mm')"
+											       sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.endingTime}:" />
+											<label value="@load(vm.event.dateTo) @converter('formatedDate', format='HH:mm')"
+											       sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.place}:" />
+											<label id="flexibleLabel" value="@load(vm.event.eventLocation)"
+											       sclass="labelNSBlackNormal"
+											       width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.listing.productPrice}:" />
+											<label value="@load(vm.event.priceWithCurrency) "
+											       sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.amea}:" />
+											<label id="ameaLabel" sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.status}:" />
+											<label id="statusLabel" sclass="labelNSBlackNormal" width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.participantsNumber}:" />
+											<label value="@load(vm.event.interests)" sclass="labelNSBlackNormal"
+											       width="90%" />
+
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.maximumAttendants}:" />
+											<label value="@load(vm.event.maximumAttendants)" sclass="labelNSBlackNormal"
+											       width="90%" />
+
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold" value="${labels.action.averageRating}:" />
+											<hbox>
+												<h:div class="rateitowner"></h:div>
+												<space />
+												<label value="(" />
+												<label value="@load(vm.event.averageRating) @converter('formatedNumber', format='###,##0.00')"
+												       sclass="labelNSBlackNormal" width="90%" />
+												<label value=")" />
+											</hbox>
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.url}:" />
+											<a href="@load(vm.event.url)" label="@load(vm.event.url)" target="_blank" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.place}:" />
+											<label value="@load(vm.event.eventLocation)" sclass="labelNSBlackNormal"
+											       width="90%" />
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.address}:" />
+											<label value="@load(vm.event.eventAddress)" sclass="labelNSBlackNormal"
+											       width="90%" />
+										</row>
+										<row id="staticMapRow" spans="4" style="background-color: #ffffff" visible="false">
+											<div style="width: 100%; float:left;">
+												<h:div id="map_canvas" style="width: 99%; height: 400px;"/>
+											</div>
+										</row>
+										<row id="dynamicMapRow" spans="4" style="background-color: #ffffff">
+											<div style="width: 100%; float:left;" visible="true">
+												<h:div id="map-canvas" style="width: 99%; height: 400px;"/>
+												<textbox id="coordsHolder" visible="false">
+													<custom-attributes org.zkoss.zk.ui.updateByClient="true" />
+												</textbox>
+											</div>
+										</row>
+										<row spans="1, 3" sclass="viewRow">
+											<label width="100%" sclass="labelNSGrayBold"
+											       value="${labels.action.files}:" />
+											<listbox model="@load(vm.uploadedPDFs)" id="pdfsListbox" width="70%"
+											         context="contextPopup" selectedItem="@bind(vm.selectedPDF)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.fileName)"
+														          onClick="@command('onDownload')"
+														          style="color:blue; CURSOR: pointer; TEXT-DECORATION: underline" />
+													</listitem>
+												</template>
+											</listbox>
+										</row>
+									</rows>
+								</grid>
+							</div>
+						</hlayout>
+					</tabpanel>
+					<tabpanel>
+						<label id="empty" value="Δεν υπάρχουν συμμετοχές" visible="false" />
+						<toolbarbutton id="XLButton" image="/img/excel.png"
+						               onClick="@command('onPrintXLS')" />
+						<listbox model="@load(vm.eventInterestsList)" paginal="@{paging}"
+						         selectedItem="@bind(vm.selectedInterest)" id="interestsListbox" width="100%"
+						         context="contextPopup">
+							<listhead>
+								<listheader id="lastName" label="${labels.user.fullname}" width="33%"
+								            sortAscending="${comparator}"
+								            sortDescending="${comparator}" onSort="@command('onSort')"
+								            style="text-align: center;white-space: normal;" />
+								<listheader id="firstName" label="${labels.user.type}" width="34%"
+								            sortAscending="${comparator}"
+								            sortDescending="${comparator}" onSort="@command('onSort')"
+								            style="text-align: center;white-space: normal;" />
+								<listheader id="userEmail" label="${labels.user.email}" width="33%"
+								            sortAscending="${comparator}"
+								            sortDescending="${comparator}" onSort="@command('onSort')"
+								            style="text-align: center;white-space: normal;" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item.user.fullName)" style="text-align: center;" />
+									<listcell label="${labels.user.external}" if="${item.user.userType==0}"
+									          style="text-align: center;" />
+									<listcell label="${labels.user.student}" if="${item.user.userType==1}"
+									          style="text-align: center;" />
+									<listcell label="${labels.user.professor}" if="${item.user.userType==2}"
+									          style="text-align: center;" />
+									<listcell label="${labels.user.administrationClerk}" if="${item.user.userType==3}"
+									          style="text-align: center;" />
+									<listcell label="@load(item.user.email)" style="text-align: center;" />
+								</listitem>
+							</template>
+						</listbox>
+					</tabpanel>
+
+				</tabpanels>
+			</tabbox>
+			<separator height="50px" />
+		</div>
+	</div>
+	<style src="/js/rateit/rateit.css" />
+	<script src="/js/rateit/jquery.rateit.js"></script>
+</window>

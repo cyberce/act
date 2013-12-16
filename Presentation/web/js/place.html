@@ -1,0 +1,163 @@
+<script type="text/Javascript">
+    <![CDATA[
+    var addressInput;
+    var addressAutocomplete;
+    var geocoder;
+    var eventMap;
+    var autocompleteOptions = {
+        componentRestrictions: {country: 'gr'}
+    };
+    var marker;
+    var address;
+    var viewMode;
+
+    var searchMapTo;
+    var resultsMap;
+    var mOptions;
+    var drawingManagerFrom;
+    var drawingManagerTo;
+    var markerTo;
+    var infoWindow;
+    var popularPlaces;
+    var selectedPopularPlace;
+    var myPlaces;
+    var selectedMyPlace;
+    var homeAddress;
+    var routeData;
+    var loadedFromAddress;
+    var loadedToAddress;
+
+
+    // load the google api loader
+    if (typeof(google) == 'undefined' || !google.load) {
+        jq.getScript('https://www.google.com/jsapi', function () {
+            loadMaps();
+        });
+    }
+    else {
+        // otherwise just load maps
+        loadMaps();
+    }
+
+    // load the google maps api
+    function loadMaps() {
+        google.load("maps", "3", {
+            callback: initialize,
+            language: 'el',
+            other_params: 'sensor=false&libraries=geometry,places'
+        });
+    }
+
+    function initialize() {
+        geocoder = new google.maps.Geocoder();
+
+        google.maps.visualRefresh = true;
+
+        mOptions = {
+            center: new google.maps.LatLng(38.0034063, 23.67906400000004),
+            zoom: 14,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false,
+            streetViewControl: false
+        };
+
+        eventMap = new google.maps.Map(jq('#map-canvas')[0], mOptions);
+
+        marker = new google.maps.Marker({
+            map: eventMap
+        });
+
+        if (!viewMode) {
+            addressInput = (document.getElementById('address'));
+
+            addressAutocomplete = new google.maps.places.Autocomplete(addressInput, autocompleteOptions);
+            google.maps.event.addListener(addressAutocomplete, 'place_changed', function () {
+                autocompleteSelected(addressInput, addressAutocomplete);
+
+                var address = jq("#address").val();
+                geocoder.geocode({ 'address': address}, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        populateZKTextbox('coordsHolder', results[0].geometry.location + "|" + address);
+                    }
+                });
+            });
+        }
+
+        // Load values for Edit Event
+        if (address != null) {
+            if (!viewMode) {
+                jq("#address").val(address);
+            }
+            geocoder.geocode({ 'address': address}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    marker.setVisible(false);
+                    marker.setPosition(results[0].geometry.location);
+                    eventMap.setCenter(results[0].geometry.location);
+                    eventMap.setZoom(17);
+                    marker.setVisible(true);
+                    populateZKTextbox('coordsHolder', results[0].geometry.location + "|" + address);
+                }
+            });
+        }
+
+    }
+
+    function autocompleteSelected(input, autocomplete) {
+        input.className = '';
+        marker.setVisible(false);
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // Inform the user that the place was not found and return.
+            input.className = 'notfound';
+            return;
+        }
+
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+            eventMap.fitBounds(place.geometry.viewport);
+        } else {
+            eventMap.setCenter(place.geometry.location);
+            eventMap.setZoom(17);
+        }
+        marker.setIcon(({
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(35, 35)
+        }));
+
+        marker.setPosition(place.geometry.location);
+        marker.setVisible(true);
+
+        var address = '';
+        if (place.address_components) {
+            address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+            ].join(' ');
+        }
+        input.className = 'rounded_input';
+    }
+
+
+    function doAccept() {
+        populateZKTextbox('coordsHolder', jq("#address").val());
+        zAu.send(new zk.Event(zk.Widget.$('$coordsHolder'), 'onChanging', null, {toServer: true}));
+    }
+
+    function loadData(addr, vMode) {
+        address = addr;
+        viewMode = vMode;
+    }
+
+    function mapme(addr) {
+        var mapLink = "http://maps.googleapis.com/maps/api/staticmap?center=" + addr + "&zoom=17&size=450x300&markers=color:red%7C" + addr + "&sensor=true";
+
+
+        $('#map_canvas').html("<img src=\"" + mapLink + "\">");
+    }
+
+    ]]>
+</script>

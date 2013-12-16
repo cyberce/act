@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/task
+                           http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<!--Activates annotation-based bean configuration -->
+	<context:annotation-config />
+	<task:annotation-driven />
+
+	<!--Scans for application @Components to deploy -->
+	<context:component-scan base-package="org.teiath" />
+
+	<!--Instructs the container to look for beans with @Transactional and decorate them -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<import resource="classpath:org/teiath/data/config/dataSource.xml" />
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/properties/database.properties</value>
+				<value>/WEB-INF/properties/log4j.properties</value>
+				<value>/WEB-INF/zk-label_el.properties</value>
+				<value>/WEB-INF/properties/email.properties</value>
+				<value>/WEB-INF/properties/notification.properties</value>
+				<value>/WEB-INF/properties/image.properties</value>
+				<value>/WEB-INF/properties/ldap.properties</value>
+				<value>/WEB-INF/properties/cron.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>org.teiath.data.domain.image.ApplicationImage</value>
+				<value>org.teiath.data.domain.image.EventMainImage</value>
+				<value>org.teiath.data.domain.pdf.EventPDF</value>
+				<value>org.teiath.data.domain.UserRole</value>
+				<value>org.teiath.data.domain.User</value>
+				<value>org.teiath.data.domain.Assessment</value>
+				<value>org.teiath.data.domain.Notification</value>
+				<value>org.teiath.data.domain.NotificationCriteria</value>
+				<value>org.teiath.data.domain.act.EventCategory</value>
+				<value>org.teiath.data.domain.act.Event</value>
+				<value>org.teiath.data.domain.act.EventInterest</value>
+				<value>org.teiath.data.domain.act.ActionAssessment</value>
+				<value>org.teiath.data.domain.act.EventNotificationCriteria</value>
+				<value>org.teiath.data.domain.act.Currency</value>
+				<value>org.teiath.data.domain.act.UserAction</value>
+				<value>org.teiath.data.domain.aggregator.Feed</value>
+				<value>org.teiath.data.domain.aggregator.FeedJob</value>
+				<value>org.teiath.data.domain.aggregator.FeedType</value>
+				<value>org.teiath.data.domain.aggregator.FeedData</value>
+				<value>org.teiath.data.domain.aggregator.FeedCategory</value>
+				<value>org.teiath.data.domain.sys.SysParameter</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</prop>
+				<prop key="c3p0.min_size">5</prop>
+				<prop key="c3p0.max_size">20</prop>
+				<prop key="c3p0.timeout">1800</prop>
+				<prop key="c3p0.max_statements">50</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="${ldap.url}" />
+		<property name="base" value="${ldap.base}" />
+		<property name="userDn" value="${ldap.adminDN}" />
+		<property name="password" value="${ldap.adminPasswd}" />
+	</bean>
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource" />
+	</bean>
+
+	<bean id="initService" class="org.teiath.data.fts.InitService"
+	      scope="singleton" init-method="initService" destroy-method="shutdownService"
+	      lazy-init="false">
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="favorPathExtension" value="true"/>
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" />
+				<entry key="rss" value="application/rss+xml" />
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<!-- Renders JSON View -->
+				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+
+				<!-- Renders XML View -->
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<constructor-arg>
+						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+							<property name="classesToBeBound">
+								<list>
+									<value>org.teiath.webservices.model.ResponseMessages</value>
+									<value>org.teiath.webservices.model.ServiceEvent</value>
+									<value>org.teiath.webservices.model.ServiceEventList</value>
+									<value>org.teiath.webservices.model.ServiceNotification</value>
+									<value>org.teiath.webservices.model.ServiceNotificationList</value>
+									<value>org.teiath.webservices.model.ServiceCategory</value>
+									<value>org.teiath.webservices.model.ServiceCategoryList</value>
+								</list>
+							</property>
+						</bean>
+					</constructor-arg>
+					<property name="contentType" value="application/xml;charset=UTF-8" />
+				</bean>
+				<!-- Renders RSS View -->
+				<bean class="org.teiath.webservices.viewers.RssViewer" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="marshallingHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="marshallingHttpMessageConverter"
+	      class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<constructor-arg ref="jaxb2Marshaller" />
+	</bean>
+	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>org.teiath.webservices.model.ServiceEvent</value>
+				<value>org.teiath.webservices.model.ResponseMessages</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="300000"/>
+	</bean>
+</beans>

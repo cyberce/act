@@ -1,0 +1,74 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.user.values.EditEventCategoryVM')"
+        validationMessages="@id('vmsgs')"
+		>
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px solid #FFFFFF;
+		border-top: 1px solid #FFFFFF;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div form="@id('fx') @load(vm.eventCategory) @save(vm.eventCategory, before='onSave')" sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="@load(not empty fx.id? '50%, 50%': '50%, 50%')">
+				<label sclass="headerText" value="${labels.common.action.edit}" />
+				<div width="100%" style="text-align: right">
+					<toolbarbutton image="/img/save.png" onClick="@command('onSave')" />
+					<toolbarbutton image="/img/cancel.png" onClick="@command('onCancel')" />
+				</div>
+			</hbox>
+			<separator height="20px" />
+			<grid oddRowSclass="non-odd" style="border: 0">
+				<columns>
+					<column width="20%" />
+					<column width="30%" />
+					<column width="20%" />
+					<column width="30%" />
+				</columns>
+				<rows>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.value.name}:" />
+						<vbox>
+							<label multiline="true" width="100%" sclass="labelMandatory"
+							       value="@load(vmsgs['fx_lastName'])" />
+							<textbox maxlength="200" width="420px" tabindex="1" mold="rounded"
+							         value="@bind(fx.name)"
+							         constraint="no empty: Το πεδίο θα πρέπει να συμπληρωθεί υποχρεωτικά" />
+						</vbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="${labels.value.description}:" />
+						<vbox>
+							<label multiline="true" width="100%" sclass="labelMandatory"
+							       value="@load(vmsgs['fx_lastName'])" />
+							<textbox rows="4" multiline="true" maxlength="300" width="200px" tabindex="1" mold="rounded"
+							         value="@bind(fx.description)"/>
+						</vbox>
+					</row>
+					<row spans="1, 3" sclass="viewRow">
+						<label width="100%" sclass="labelNSGrayNormal" value="Κατηγορία-πατέρας:" />
+						<tree id="tree" selectedItem="@bind(vm.selectedParentEventCategory)" width="50%">
+						</tree>
+					</row>
+				</rows>
+			</grid>
+		</div>
+	</div>
+
+</window>

@@ -1,0 +1,126 @@
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/login_template.zul"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.IndexVM')">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<!-- Piwik -->
+	<script type="text/javascript">
+		var _paq = _paq || [];
+		_paq.push(["trackPageView"]);
+		_paq.push(["enableLinkTracking"]);
+
+		(function() {
+		var u=(("https:" == document.location.protocol) ? "https" : "http") + "://livestats.noc.teiath.gr/piwik/";
+		_paq.push(["setTrackerUrl", u+"piwik.php"]);
+		_paq.push(["setSiteId", "93"]);
+		var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+		g.type="text/javascript";
+		g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+		})();
+	</script>
+	<!-- End Piwik Tracking Code -->
+
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<separator height="15px" />
+			<label id="serviceLabel" sclass="headerText" value="${labels.common.messages.services}" />
+			<separator height="25px" />
+			<borderlayout height="500px">
+				<center border="0">
+					<borderlayout>
+						<west id="west" maxsize="200" size="60%" vflex="true" style="border: 0">
+							<hlayout>
+								<separator height="5px" />
+								<vbox>
+									<label sclass="textLabel"
+									       value="Καλώς ήλθατε στην ιστοσελίδα της Υπηρεσίας Ενημέρωσης Εκπαιδευτικών και Πολιτιστικών Δράσεων του ΤΕΙ Αθήνας. Η υπηρεσία δίνει τη δυνατότητα
+								       σε φοιτητές του ΤΕΙ Αθήνας αλλά και σε εξωτερικούς χρήστες να ενημερώνονται για εκπαιδευτικές και πολιτιστικές δράσεις τόσο του ΤΕΙ Αθήνας όσο και άλλων φορέων." />
+									<separator height="5px" />
+									<label sclass="textLabel"
+									       value="Οι χρήστες της υπηρεσίας έχουν τη δυνατότητα να αναζητήσουν δράσεις που τους ενδιαφέρουν καθώς και να δηλώσουν τη συμμετοχή τους σε αυτές. Εππλέον έχουν τη δυνατότητα λήψης αυτοματοποιημένων ενημερώσεων για αναρτήσεις δράσεων μέσω
+									       της ιστοσελίδας της υπηρεσίας αλλά και μέσω e-mail, RSS και υπηρεσιών κοινωνικής δικτύωσης." />
+									<separator height="5px" />
+									<label sclass="textLabel"
+									       value="Η υπηρεσία παρέχεται από το Τμήμα Δημοσίων Σχέσεων." />
+									<separator height="10px" />
+									<label sclass="labelNSGrayBold"
+									       value="Προσωρινά η υπηρεσία βρίσκεται σε δοκιμαστική λειτουργία και τα δεδομένα της είναι πιλοτικά." />
+								</vbox>
+
+							</hlayout>
+						</west>
+						<center border="0">
+						</center>
+						<east id="east" size="30%" vflex="true">
+							<vlayout>
+								<separator height="5px" />
+								<label id="ssoLogin" onClick="@command('onSSOLogin')"
+								       onMouseOver='self.setSclass("secondaryTextLabelActive")'
+								       onMouseOut='self.setSclass("linkTextLabel")'
+								       value="Αν διαθέτετε λογαριασμό δικτυακών υπηρεσιών του ΤΕΙ Αθήνας συνδεθείτε εδώ." sclass="linkTextLabel" />
+								<separator height="20px" />
+								<vbox>
+									<groupbox id="gb4" mold="3d" width="100%" open="false">
+										<attribute name="onOpen">
+										</attribute>
+										<caption id="searchCaption" label="Για σύνδεση εξωτερικού χρήστη πατήστε εδώ">
+										</caption>
+										<vbox>
+											<label id="username" width="100%" sclass="labelNSBlueBold"
+											       value="${labels.user.username}" />
+											<textbox tabindex="1" mold="rounded" value="@bind(vm.username)" />
+											<separator height="10px" />
+											<label id="password" width="100%" sclass="labelNSBlueBold"
+											       value="${labels.user.password}" onOK="@command('onLogin')" />
+											<textbox type="password" tabindex="2" mold="rounded"
+											         value="@bind(vm.password)" onOK="@command('onLogin')" />
+											<separator height="10px" />
+											<div align="center">
+												<toolbarbutton image="/img/login.png" onClick="@command('onLogin')"
+												               autodisable="self" />
+											</div>
+										</vbox>
+									</groupbox>
+									<separator height="50px" />
+									<label onClick="@command('iForgot')"
+									       onMouseOver='self.setSclass("tos-label-active")'
+									       onMouseOut='self.setSclass("labelNSGrayNormal")'
+									       value="Ξέχασατε τον κωδικό πρόσβασης;" sclass="labelNSGrayNormal" />
+								</vbox>
+								<separator height="15px" />
+								<vbox>
+									<label sclass="secondaryTextLabel"
+									       value="Αν δε διαθέτετε λογαρισμό δικτυακών υπηρεσιών του ΤΕΙ Αθήνας μπορείτε να εγγραφείτε στον παρακάτω σύνδεσμο:" />
+									<separator height="10px" />
+									<div align="center">
+										<toolbarbutton image="/img/register.png" onClick="@command('onRegister')"
+										               onOK="@command('onLogin')" autodisable="self" />
+									</div>
+								</vbox>
+							</vlayout>
+
+						</east>
+					</borderlayout>
+				</center>
+			</borderlayout>
+			<separator height="15px" />
+		</div>
+	</div>
+</window>

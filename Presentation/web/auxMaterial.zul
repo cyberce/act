@@ -1,0 +1,42 @@
+<?page viewport="width=device-width, initial-scale=0, user-scalable=yes"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/login_template.zul"?>
+<?page title="${labels.template.title}"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.AuxMaterialVM')">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<div sclass="detail">
+		<hbox width="99%" widths="50%, 50%">
+			<label sclass="headerText" value="Βοηθητικό Υλικό" />
+		</hbox>
+		<separator height="50px"/>
+		<div align="center" width="95%">
+				<label onClick="@command('presentation')" onMouseOver='self.setSclass("auxMaterial-label-active")'
+			           onMouseOut='self.setSclass("auxMaterial-label")' value="Παρουσίαση Υπηρεσίας" sclass="auxMaterial-label" />
+				<space width="20px" />
+				<label onClick="@command('manual')" onMouseOver='self.setSclass("auxMaterial-label-active")'
+			        onMouseOut='self.setSclass("auxMaterial-label")' value="Εγχειρίδιο χρήστη" sclass="auxMaterial-label" />
+				<space width="20px" />
+				<label onClick="@command('api')" onMouseOver='self.setSclass("auxMaterial-label-active")'
+				       onMouseOut='self.setSclass("auxMaterial-label")' value="Web Services" sclass="auxMaterial-label" />
+				<space width="20px" />
+		</div>
+		<space width="20px" />
+	</div>
+</window>

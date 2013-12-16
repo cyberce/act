@@ -1,0 +1,101 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        id="userViewWin"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.user.ListValuesVM')">
+
+	<style>
+		tr.z-row-over > td.z-row-inner {
+		border-bottom: 1px dotted #434E9E;
+		border-top: 1px dotted #434E9E;
+		}
+
+		tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
+		background-image: none;
+		}
+	</style>
+	<div sclass="detail">
+		<div align="left" width="99%">
+			<hbox width="100%" widths="50%, 50%">
+				<label sclass="headerText" value="${labels.value.list}" />
+			</hbox>
+			<separator height="20px" />
+			<tabbox height="500px">
+				<tabs id="tabs">
+					<tab label="${labels.action.categories}" />
+					<tab label="${labels.listing.prevalentCurrencies}" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<div align="right">
+							<hbox>
+								<toolbarbutton image="/img/add.png"
+					               onClick="@command('onCreateActionCategories')" />
+
+								<toolbarbutton image="/img/edit.png" onClick="@command('onEditActionCategories')"
+					               disabled="@load(empty vm.selectedEventCategory)" />
+
+								<toolbarbutton image="/img/delete.png" onClick="@command('onDeleteActionCategories')"
+					               disabled="@load(empty vm.selectedEventCategory)" />
+
+							</hbox>
+						</div>
+						<tree id="tree" selectedItem="@bind(vm.selectedEventCategory)" width="100%">
+						</tree>
+					</tabpanel>
+					<tabpanel>
+						<div align="right">
+							<hbox>
+								<toolbarbutton image="/img/add.png"
+								               onClick="@command('onCreateCurrencies')" />
+								<toolbarbutton image="/img/edit.png" onClick="@command('onEditCurrencies')"
+								               disabled="@load(empty vm.selectedCurrency)" />
+								<toolbarbutton image="/img/delete.png" onClick="@command('onDeleteCurrencies')"
+								               disabled="@load(empty vm.selectedCurrency)" />
+							</hbox>
+						</div>
+						<separator height="5px" />
+						<listbox model="@load(vm.currencies)" selectedItem="@bind(vm.selectedCurrency)"
+						         width="99%" context="contextPopup">
+							<listhead>
+								<listheader id="name" sortAscending="${comparator}"
+								            sortDescending="${comparator}" onSort="@command('onSort')"
+											label="${labels.value.name}" width="34%"
+								            style="text-align: center;white-space: normal;" />
+								<listheader id="code"  sortAscending="${comparator}"
+								            sortDescending="${comparator}" onSort="@command('onSort')"
+								            label="${labels.value.code}" width="33%"
+								            style="text-align: center;white-space: normal;" />
+								<listheader id="defaultCurrency"  sortAscending="${comparator}"
+								            sortDescending="${comparator}" onSort="@command('onSort')"
+								            label="${labels.value.defaultCurrency}" width="33%"
+								            style="text-align: center;white-space: normal;" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item.name)" style="text-align: left" />
+									<listcell label="@load(item.code)" style="text-align: center" />
+									<listcell label="${labels.common.yes}" if="${item.defaultCurrency}"
+									          style="text-align: left" />
+									<listcell label="${labels.common.no}" if="${!item.defaultCurrency}"
+									          style="text-align: left" />
+								</listitem>
+							</template>
+						</listbox>
+						<paging width="99%" mold="os" id="paging" pageSize="10" detailed="true" onPaging="@command('onPaging')" />
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+			<separator height="20px" />
+		</div>
+	</div>
+</window>

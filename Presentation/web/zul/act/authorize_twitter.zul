@@ -1,0 +1,32 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        id="twitterWin"
+        border="normal"
+        width="500px"
+        height="500px"
+        mode="modal"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.AuthorizeTwitterVM')">
+
+	<div  form="@id('fx') @load(vm.user) @save(vm.user, before='onOk')"
+	     align="center" width="100%">
+		<image src="/img/twitter_app.png" style="margin-left: 50px;" />
+		<separator height="50px" />
+		<vbox align="center">
+			<hbox style="margin-left: -20px;">
+				<label width="100%" sclass="twitterLabel" value="Pin:" />
+				<textbox width="180px" tabindex="1" mold="rounded" value="@bind(vm.pin)" />
+			</hbox>
+			<separator height="20px" />
+			<hbox style="margin-left: 50px;">
+				<toolbarbutton label="Ok" onClick="@command('onOk')" autodisable="self" />
+				<toolbarbutton label="${labels.user.cancel}" onClick="@command('onCancel')" autodisable="self" />
+			</hbox>
+		</vbox>
+	</div>
+</window>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="commons-collections-2.1.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jasperreports-4.6.0/commons-collections-2.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jasperreports-4.6.0/commons-digester-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jasperreports-4.6.0/groovy-all-1.7.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jasperreports-4.6.0/iText-2.1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jasperreports-4.6.0/jasperreports-4.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

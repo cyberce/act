@@ -1,0 +1,187 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/zul/templates/main_template.zul"?>
+<?page viewport="width=device-width, initial-scale=0.5, user-scalable=yes"?>
+<?page title="${labels.template.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/img/logo.png"?>
+<?root-attributes lang="en"xml:lang="en"?>
+<window xmlns="http://www.zkoss.org/2005/zul"
+        self="@define(detail)"
+        border="none"
+        width="1200px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.teiath.web.vm.act.SearchActionVM')">
+
+	<zscript><![CDATA[
+
+      import java.util.Comparator;
+      import org.teiath.web.comparator.ListboxEmptyComparator;
+
+      Comparator comparator = new ListboxEmptyComparator();
+  ]]></zscript>
+
+	<style>
+		div.z-listbox {
+		border: 0;
+		}
+
+		.z-paging {
+		background-color: #ffffff;
+		}
+
+		div.z-listbox-pgi-b {
+		border: 0;
+		}
+	</style>
+
+	<div sclass="detail">
+		<div align="left" width="95%">
+			<hbox width="100%" widths="5%, 95%">
+				<label sclass="headerText" value="${labels.action.search}" />
+			</hbox>
+			<separator height="10px" />
+			<groupbox form="@id('fx') @save(vm.eventSearchCriteria, before='onSearch')" id="gb3" mold="3d" width="100%"
+			          open="true">
+				<attribute name="onOpen">
+					<![CDATA[
+                      import org.zkoss.util.resource.Labels;
+
+                      searchHeader.value = self.isOpen()? Labels.getLabel("search.title_hide") : Labels.getLabel("search.title_show");
+                      searchCaption.label = self.isOpen()? Labels.getLabel("search.criteria") : Labels.getLabel("search.click_here");
+                  ]]>
+				</attribute>
+				<caption id="searchCaption" label="${labels.search.hide}"></caption>
+				<separator height="10px" />
+				<hbox width="100%" widths="30%,30%,40%">
+					<div>
+						<label sclass="labelNSGrayNormal" value="${labels.action.theme}" />
+						<separator height="3px" />
+						<div>
+							<tree id="tree" width="90%" checkmark="true" selectedItems="@bind(vm.selectedItems)">
+							</tree>
+						</div>
+						<separator height="20px" />
+						<label sclass="labelNSGrayNormal" value="${labels.action.amea}:" />
+						<separator height="3px" />
+						<div>
+							<hbox>
+								<radiogroup width="100%" id="ameaRG"
+								            selectedItem="@bind(vm.eventSearchCriteria.disabledAccess) @converter('org.teiath.web.converter.RadiogroupBooleanConverter')"
+								            onCheck="@command('onToggleTrueFalse')">
+										<radio value="true" label="${labels.common.yes}" radiogroup="ameaRG"
+										       selected="true" />
+										<radio value="false" label="${labels.common.no}" radiogroup="ameaRG" />
+								</radiogroup>
+								<radiogroup width="100%" id="emptyRG" onCheck="@command('onToggleNotSpecified')">
+									<radio value="true" label="${labels.common.not_specified}"
+									       radiogroup="emptyRG"
+									       tabindex="1" />
+								</radiogroup>
+							</hbox>
+						</div>
+					</div>
+					<div>
+						<div>
+							<label sclass="labelNSGrayNormal" value="${labels.common.date}" />
+							<separator height="5px" />
+							<div>
+								<label sclass="labelNSGrayNormal" value="${labels.route.dateFrom}:" />
+								<separator height="5px" />
+								<datebox id="dateFromSearch"
+								         cols="12"
+								         format="short " mold="rounded"
+								         value="@bind(vm.eventSearchCriteria.dateFrom)" />
+							</div>
+							<div>
+								<label sclass="labelNSGrayNormal" value="${labels.route.dateTo}:" />
+								<separator height="5px" />
+								<datebox id="dateToSearch"
+								         cols="12" format="short " mold="rounded"
+								         value="@bind(vm.eventSearchCriteria.dateTo)" />
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<label sclass="labelNSGrayNormal" value="${labels.listing.keyword}" />
+						<separator height="3px" />
+						<textbox width="95%" tabindex="1" value="@bind(vm.eventSearchCriteria.eventKeyword)" />
+						<separator height="20px" />
+						<label sclass="labelNSGrayNormal" value="${labels.action.code}:" />
+						<separator height="3px" />
+						<textbox width="95%" tabindex="1" value="@bind(vm.eventSearchCriteria.code)" />
+					</div>
+				</hbox>
+				<separator height="30px" />
+				<hbox>
+					<label value="${labels.common.paging}:" />
+					<intbox id="paging" value="10" />
+				</hbox>
+				<separator height="10px" />
+				<hbox width="100%" widths="40%,50%,10%">
+					<div></div>
+					<div>
+						<toolbarbutton image="/img/search.png"
+						               onClick="@command('onSearch')" />
+						<space width="20px" />
+						<toolbarbutton image="/img/reset.png"
+						               onClick="@command('onResetSearch')" />
+					</div>
+					<div></div>
+				</hbox>
+			</groupbox>
+			<separator height="30px" />
+			<div align="right" id="toolbar" visible="false">
+				<hbox>
+					<toolbarbutton id="viewButton" image="/img/view.png" onClick="@command('onView')"
+					               disabled="@load(empty vm.selectedEvent)" />
+					<toolbarbutton image="/img/print.png"
+					               onClick="@command('onPrintPDF')" />
+				</hbox>
+			</div>
+		</div>
+		<div>
+			<listbox model="@load(vm.eventsList)" paginal="@{pag}" selectedItem="@bind(vm.selectedEvent)"
+			         id="eventsListbox" width="95%" context="contextPopup" visible="false" onPaging="@command('onPaging')">
+				<listhead style="border: 1px solid black">
+					<listheader id="eventTitle" label="${labels.action.title}" width="30%"
+					            sort="auto(eventTitle)" style="text-align: center; white-space: normal;" />
+					<listheader id="eventCategory" label="${labels.action.theme}" width="20%"
+					            sort="auto(eventCategory.name)"
+					            style="text-align: center; white-space: normal;" />
+					<listheader id="dateFrom" label="${labels.action.dateFrom}" width="10%"
+					            sort="auto(dateFrom)"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="dateTo" label="${labels.action.dateTo}" width="10%"
+					            sort="auto(dateTo)"
+					            style="text-align: center; white-space: normal;" />
+					<listheader id="eventLocation" label="${labels.action.place}" width="10%"
+					            sort="auto(eventLocation)" style="text-align: center; white-space: normal;" />
+					<listheader id="eventStatus" label="${labels.action.participantsNumber}" width="10%"
+					            sort="auto(eventStatus)"
+					            style="text-align: center;white-space: normal;" />
+					<listheader id="rating" label="${labels.action.hitRatio}" width="10%"
+					            sort="auto(averageRating)"
+					            style="text-align: center; white-space: normal;" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.eventTitle)" style="text-align: left;white-space: normal;" />
+						<listcell label="@load(item.eventCategory.name)"
+						          style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.dateFrom) @converter('formatedDate', format='dd/MM/yyyy')"
+						          style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.dateTo) @converter('formatedDate', format='dd/MM/yyyy')"
+						          style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.eventLocation)" style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.interests)" style="text-align: center;white-space: normal;" />
+						<listcell label="@load(item.eventRankingString)"
+						          style="text-align: center;white-space: normal;" />
+					</listitem>
+				</template>
+			</listbox>
+			<label id="empty" value="${labels.action.noActions}" visible="false"></label>
+			<paging id="pag" mold="os" width="95%" detailed="true" onPaging="@command('onPaging')" visible="false"/>
+		</div>
+	</div>
+</window>
